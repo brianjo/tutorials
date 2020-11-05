@@ -430,7 +430,7 @@ Additional Resources
    :caption: PyTorch Recipes
 
    See All Recipes <recipes/recipes_index>
-   Prototype <prototype_source/*>
+   Prototype <recipes/prototype_source/*>
 
 .. toctree::
    :maxdepth: 2
