@@ -453,11 +453,11 @@ def forward(self,
 <h3>1. RuntimeError <cite>attribute lookup is not defined on python value of type</cite><a class="headerlink" href="#runtimeerror-attribute-lookup-is-not-defined-on-python-value-of-type" title="Permalink to this headline">¶</a></h3>
 <p>For this error, pass the value of the model as a parameter in the constructor. This is because when calling <cite>script</cite> on a model that accepts another model as a parameter, the model passed is actually of type <cite>TracedModule</cite> or <cite>ScriptModule</cite>, not of type <cite>Module</cite>, making the the model attribute not defined when scripting.</p>
 <p>For example, the <cite>LuongAttnDecoderRNN</cite> module in the tutorial above has an attribute <cite>n_layers</cite>, and the <cite>GreedySearchDecoder</cite> module refers to the <cite>n_layers</cite> attribute of a <cite>decoder</cite> instance of the <cite>LuongAttnDecoderRNN</cite> module, so in order to make <cite>script</cite> work, the <cite>GreedySearchDecoder</cite> module’s constructor needs to be changed from:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">):</span>
 </pre></div>
 </div>
 <p>to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">decoder_n_layers</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">decoder_n_layers</span><span class="p">):</span>
   <span class="o">...</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_decoder_n_layers</span> <span class="o">=</span> <span class="n">decoder_n_layers</span>
 </pre></div>
@@ -491,7 +491,7 @@ def forward(self,
 <div class="section" id="optimize-a-torchscript-model">
 <h2>Optimize a TorchScript Model<a class="headerlink" href="#optimize-a-torchscript-model" title="Permalink to this headline">¶</a></h2>
 <p>Simply run the following code snippet to optimize a TorchScript model generated with the <cite>trace</cite> and/or <cite>script</cite> method:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.mobile_optimizer</span> <span class="kn">import</span> <span class="n">optimize_for_mobile</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.mobile_optimizer</span> <span class="k">import</span> <span class="n">optimize_for_mobile</span>
 <span class="n">optimized_torchscript_model</span> <span class="o">=</span> <span class="n">optimize_for_mobile</span><span class="p">(</span><span class="n">torchscript_model</span><span class="p">)</span>
 </pre></div>
 </div>

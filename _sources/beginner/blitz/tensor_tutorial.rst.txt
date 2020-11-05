@@ -34,11 +34,6 @@ Tensors can also be used on a GPU to accelerate computing.
     import torch
 
 
-
-
-
-
-
 .. note::
     An uninitialized matrix is declared,
     but does not contain definite known
@@ -57,22 +52,6 @@ Construct a 5x3 matrix, uninitialized:
     print(x)
  
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[ 6.8576e+07,  4.5629e-41,  3.4296e+04],
-            [ 3.0656e-41,  5.1725e+10,  7.0413e+15],
-            [-6.2637e-10,  1.4842e+22,  9.2030e+14],
-            [ 7.3787e-19,  3.1588e-29,  1.6175e-38],
-            [ 4.5981e+34,         nan,  1.0947e-22]])
-
-
 Construct a randomly initialized matrix:
 
 
@@ -81,22 +60,6 @@ Construct a randomly initialized matrix:
 
     x = torch.rand(5, 3)
     print(x)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[0.6468, 0.0755, 0.2913],
-            [0.3124, 0.6373, 0.4386],
-            [0.4053, 0.4354, 0.5891],
-            [0.6582, 0.7502, 0.6599],
-            [0.9855, 0.4069, 0.0540]])
 
 
 Construct a matrix filled zeros and of dtype long:
@@ -109,22 +72,6 @@ Construct a matrix filled zeros and of dtype long:
     print(x)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0]])
-
-
 Construct a tensor directly from data:
 
 
@@ -133,18 +80,6 @@ Construct a tensor directly from data:
 
     x = torch.tensor([5.5, 3])
     print(x)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([5.5000, 3.0000])
 
 
 or create a tensor based on an existing tensor. These methods
@@ -162,27 +97,6 @@ new values are provided by user
     print(x)                                      # result has the same size
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[1., 1., 1.],
-            [1., 1., 1.],
-            [1., 1., 1.],
-            [1., 1., 1.],
-            [1., 1., 1.]], dtype=torch.float64)
-    tensor([[-0.2216, -0.0608, -0.6641],
-            [ 0.8782,  1.4666,  0.4133],
-            [ 0.8376, -0.4293,  0.9140],
-            [ 0.1954,  1.1830, -0.5375],
-            [-0.6112, -1.5640, -0.1305]])
-
-
 Get its size:
 
 
@@ -190,18 +104,6 @@ Get its size:
 
 
     print(x.size())
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    torch.Size([5, 3])
 
 
 .. note::
@@ -221,22 +123,6 @@ Addition: syntax 1
     print(x + y)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[-0.1270,  0.0530,  0.0508],
-            [ 1.0932,  1.9178,  0.7669],
-            [ 1.6982,  0.5159,  1.0761],
-            [ 1.0950,  1.7699, -0.2970],
-            [-0.1963, -0.6972,  0.8577]])
-
-
 Addition: syntax 2
 
 
@@ -244,22 +130,6 @@ Addition: syntax 2
 
 
     print(torch.add(x, y))
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[-0.1270,  0.0530,  0.0508],
-            [ 1.0932,  1.9178,  0.7669],
-            [ 1.6982,  0.5159,  1.0761],
-            [ 1.0950,  1.7699, -0.2970],
-            [-0.1963, -0.6972,  0.8577]])
 
 
 Addition: providing an output tensor as argument
@@ -272,22 +142,6 @@ Addition: providing an output tensor as argument
     print(result)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[-0.1270,  0.0530,  0.0508],
-            [ 1.0932,  1.9178,  0.7669],
-            [ 1.6982,  0.5159,  1.0761],
-            [ 1.0950,  1.7699, -0.2970],
-            [-0.1963, -0.6972,  0.8577]])
-
-
 Addition: in-place
 
 
@@ -297,22 +151,6 @@ Addition: in-place
     # adds x to y
     y.add_(x)
     print(y)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[-0.1270,  0.0530,  0.0508],
-            [ 1.0932,  1.9178,  0.7669],
-            [ 1.6982,  0.5159,  1.0761],
-            [ 1.0950,  1.7699, -0.2970],
-            [-0.1963, -0.6972,  0.8577]])
 
 
 .. note::
@@ -328,18 +166,6 @@ You can use standard NumPy-like indexing with all bells and whistles!
     print(x[:, 1])
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([-0.0608,  1.4666, -0.4293,  1.1830, -1.5640])
-
-
 Resizing: If you want to resize/reshape tensor, you can use ``torch.view``:
 
 
@@ -351,18 +177,6 @@ Resizing: If you want to resize/reshape tensor, you can use ``torch.view``:
     print(x.size(), y.size(), z.size())
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    torch.Size([4, 4]) torch.Size([16]) torch.Size([2, 8])
-
-
 If you have a one element tensor, use ``.item()`` to get the value as a
 Python number
 
@@ -372,19 +186,6 @@ Python number
     x = torch.randn(1)
     print(x)
     print(x.item())
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([0.3417])
-    0.3417457342147827
 
 
 **Read later:**
@@ -416,35 +217,11 @@ Converting a Torch Tensor to a NumPy Array
 
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([1., 1., 1., 1., 1.])
-
-
-
 .. code-block:: default
 
 
     b = a.numpy()
     print(b)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [1. 1. 1. 1. 1.]
 
 
 See how the numpy array changed in value.
@@ -456,19 +233,6 @@ See how the numpy array changed in value.
     a.add_(1)
     print(a)
     print(b)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([2., 2., 2., 2., 2.])
-    [2. 2. 2. 2. 2.]
 
 
 Converting NumPy Array to Torch Tensor
@@ -485,19 +249,6 @@ See how changing the np array changed the Torch Tensor automatically
     np.add(a, 1, out=a)
     print(a)
     print(b)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    [2. 2. 2. 2. 2.]
-    tensor([2., 2., 2., 2., 2.], dtype=torch.float64)
 
 
 All the Tensors on the CPU except a CharTensor support converting to
@@ -523,22 +274,9 @@ Tensors can be moved onto any device using the ``.to`` method.
         print(z.to("cpu", torch.double))       # ``.to`` can also change dtype together!
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([1.3417], device='cuda:0')
-    tensor([1.3417], dtype=torch.float64)
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.997 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_beginner_blitz_tensor_tutorial.py:

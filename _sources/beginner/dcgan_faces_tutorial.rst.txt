@@ -148,18 +148,6 @@ will be explained in the coming sections.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Random Seed:  999
-
-
 Inputs
 ------
 
@@ -238,11 +226,6 @@ Let’s define some inputs for the run:
 
 
 
-
-
-
-
-
 Data
 ----
 
@@ -303,14 +286,6 @@ training data.
 
 
 
-
-
-.. image:: /beginner/images/sphx_glr_dcgan_faces_tutorial_001.png
-    :class: sphx-glr-single-img
-
-
-
-
 Implementation
 --------------
 
@@ -342,11 +317,6 @@ applied to the models immediately after initialization.
         elif classname.find('BatchNorm') != -1:
             nn.init.normal_(m.weight.data, 1.0, 0.02)
             nn.init.constant_(m.bias.data, 0)
-
-
-
-
-
 
 
 
@@ -415,11 +385,6 @@ code for the generator.
 
 
 
-
-
-
-
-
 Now, we can instantiate the generator and apply the ``weights_init``
 function. Check out the printed model to see how the generator object is
 structured.
@@ -443,35 +408,6 @@ structured.
     # Print the model
     print(netG)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Generator(
-      (main): Sequential(
-        (0): ConvTranspose2d(100, 512, kernel_size=(4, 4), stride=(1, 1), bias=False)
-        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (2): ReLU(inplace=True)
-        (3): ConvTranspose2d(512, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (5): ReLU(inplace=True)
-        (6): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (7): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (8): ReLU(inplace=True)
-        (9): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (10): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (11): ReLU(inplace=True)
-        (12): ConvTranspose2d(64, 3, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (13): Tanh()
-      )
-    )
 
 
 Discriminator
@@ -528,11 +464,6 @@ Discriminator Code
 
 
 
-
-
-
-
-
 Now, as with the generator, we can create the discriminator, apply the
 ``weights_init`` function, and print the model’s structure.
 
@@ -555,34 +486,6 @@ Now, as with the generator, we can create the discriminator, apply the
     # Print the model
     print(netD)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Discriminator(
-      (main): Sequential(
-        (0): Conv2d(3, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (1): LeakyReLU(negative_slope=0.2, inplace=True)
-        (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (3): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (4): LeakyReLU(negative_slope=0.2, inplace=True)
-        (5): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (6): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (7): LeakyReLU(negative_slope=0.2, inplace=True)
-        (8): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-        (9): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-        (10): LeakyReLU(negative_slope=0.2, inplace=True)
-        (11): Conv2d(512, 1, kernel_size=(4, 4), stride=(1, 1), bias=False)
-        (12): Sigmoid()
-      )
-    )
 
 
 Loss Functions and Optimizers
@@ -635,11 +538,6 @@ images form out of the noise.
     # Setup Adam optimizers for both G and D
     optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999))
     optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
-
-
-
-
-
 
 
 
@@ -798,178 +696,6 @@ run and if you removed some data from the dataset.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Starting Training Loop...
-    [0/5][0/1583]   Loss_D: 1.9847  Loss_G: 5.5914  D(x): 0.6004    D(G(z)): 0.6680 / 0.0062
-    [0/5][50/1583]  Loss_D: 0.8639  Loss_G: 18.1977 D(x): 0.9117    D(G(z)): 0.4232 / 0.0000
-    [0/5][100/1583] Loss_D: 0.3898  Loss_G: 8.1070  D(x): 0.8385    D(G(z)): 0.0105 / 0.0201
-    [0/5][150/1583] Loss_D: 0.8830  Loss_G: 3.2149  D(x): 0.5983    D(G(z)): 0.0084 / 0.0609
-    [0/5][200/1583] Loss_D: 1.3662  Loss_G: 2.0088  D(x): 0.3762    D(G(z)): 0.0175 / 0.1770
-    [0/5][250/1583] Loss_D: 0.2958  Loss_G: 4.6343  D(x): 0.8309    D(G(z)): 0.0699 / 0.0145
-    [0/5][300/1583] Loss_D: 1.0681  Loss_G: 1.4432  D(x): 0.5369    D(G(z)): 0.0592 / 0.3276
-    [0/5][350/1583] Loss_D: 1.5408  Loss_G: 13.1054 D(x): 0.9520    D(G(z)): 0.7024 / 0.0000
-    [0/5][400/1583] Loss_D: 0.5754  Loss_G: 5.7786  D(x): 0.8835    D(G(z)): 0.3045 / 0.0057
-    [0/5][450/1583] Loss_D: 0.3635  Loss_G: 4.1962  D(x): 0.8195    D(G(z)): 0.0993 / 0.0304
-    [0/5][500/1583] Loss_D: 2.8085  Loss_G: 7.4031  D(x): 0.1624    D(G(z)): 0.0003 / 0.0021
-    [0/5][550/1583] Loss_D: 0.4597  Loss_G: 4.2258  D(x): 0.8202    D(G(z)): 0.1648 / 0.0261
-    [0/5][600/1583] Loss_D: 0.8003  Loss_G: 2.1248  D(x): 0.6025    D(G(z)): 0.0884 / 0.1799
-    [0/5][650/1583] Loss_D: 0.6352  Loss_G: 6.6132  D(x): 0.8745    D(G(z)): 0.3244 / 0.0030
-    [0/5][700/1583] Loss_D: 0.4881  Loss_G: 3.7922  D(x): 0.7940    D(G(z)): 0.1583 / 0.0404
-    [0/5][750/1583] Loss_D: 0.7569  Loss_G: 8.4424  D(x): 0.9580    D(G(z)): 0.4395 / 0.0006
-    [0/5][800/1583] Loss_D: 0.6303  Loss_G: 3.5249  D(x): 0.6646    D(G(z)): 0.0377 / 0.0475
-    [0/5][850/1583] Loss_D: 0.4562  Loss_G: 4.3103  D(x): 0.7909    D(G(z)): 0.0896 / 0.0295
-    [0/5][900/1583] Loss_D: 0.2926  Loss_G: 4.8268  D(x): 0.8654    D(G(z)): 0.0904 / 0.0154
-    [0/5][950/1583] Loss_D: 0.6873  Loss_G: 3.2930  D(x): 0.7710    D(G(z)): 0.2425 / 0.0679
-    [0/5][1000/1583]        Loss_D: 0.4474  Loss_G: 5.1154  D(x): 0.9014    D(G(z)): 0.2413 / 0.0118
-    [0/5][1050/1583]        Loss_D: 0.5227  Loss_G: 4.5631  D(x): 0.8877    D(G(z)): 0.2882 / 0.0197
-    [0/5][1100/1583]        Loss_D: 0.3265  Loss_G: 4.9723  D(x): 0.9253    D(G(z)): 0.1932 / 0.0118
-    [0/5][1150/1583]        Loss_D: 2.0190  Loss_G: 1.2913  D(x): 0.2878    D(G(z)): 0.0023 / 0.4268
-    [0/5][1200/1583]        Loss_D: 0.6745  Loss_G: 6.8166  D(x): 0.9661    D(G(z)): 0.4054 / 0.0023
-    [0/5][1250/1583]        Loss_D: 1.2208  Loss_G: 1.9484  D(x): 0.4430    D(G(z)): 0.0224 / 0.2334
-    [0/5][1300/1583]        Loss_D: 0.5775  Loss_G: 4.3202  D(x): 0.8747    D(G(z)): 0.3096 / 0.0226
-    [0/5][1350/1583]        Loss_D: 0.8330  Loss_G: 2.9315  D(x): 0.5854    D(G(z)): 0.0568 / 0.1013
-    [0/5][1400/1583]        Loss_D: 0.5434  Loss_G: 3.0217  D(x): 0.7409    D(G(z)): 0.0954 / 0.0920
-    [0/5][1450/1583]        Loss_D: 0.6279  Loss_G: 4.6093  D(x): 0.8753    D(G(z)): 0.3230 / 0.0181
-    [0/5][1500/1583]        Loss_D: 0.6349  Loss_G: 5.5203  D(x): 0.8925    D(G(z)): 0.3520 / 0.0070
-    [0/5][1550/1583]        Loss_D: 0.6359  Loss_G: 2.4367  D(x): 0.6886    D(G(z)): 0.1011 / 0.1323
-    [1/5][0/1583]   Loss_D: 1.3747  Loss_G: 6.5409  D(x): 0.9228    D(G(z)): 0.6213 / 0.0031
-    [1/5][50/1583]  Loss_D: 0.5187  Loss_G: 3.4158  D(x): 0.7804    D(G(z)): 0.1849 / 0.0521
-    [1/5][100/1583] Loss_D: 0.7891  Loss_G: 2.4292  D(x): 0.5906    D(G(z)): 0.0587 / 0.1336
-    [1/5][150/1583] Loss_D: 1.3016  Loss_G: 4.7790  D(x): 0.9652    D(G(z)): 0.6502 / 0.0165
-    [1/5][200/1583] Loss_D: 0.5326  Loss_G: 5.6546  D(x): 0.9475    D(G(z)): 0.3178 / 0.0079
-    [1/5][250/1583] Loss_D: 0.3686  Loss_G: 4.9421  D(x): 0.9490    D(G(z)): 0.2401 / 0.0126
-    [1/5][300/1583] Loss_D: 0.4391  Loss_G: 4.0600  D(x): 0.7358    D(G(z)): 0.0468 / 0.0358
-    [1/5][350/1583] Loss_D: 0.3938  Loss_G: 3.4079  D(x): 0.7357    D(G(z)): 0.0399 / 0.0608
-    [1/5][400/1583] Loss_D: 0.2983  Loss_G: 3.9345  D(x): 0.8159    D(G(z)): 0.0636 / 0.0343
-    [1/5][450/1583] Loss_D: 0.4736  Loss_G: 3.5611  D(x): 0.8428    D(G(z)): 0.2090 / 0.0458
-    [1/5][500/1583] Loss_D: 0.3561  Loss_G: 3.9697  D(x): 0.8716    D(G(z)): 0.1683 / 0.0330
-    [1/5][550/1583] Loss_D: 0.5811  Loss_G: 3.2186  D(x): 0.7847    D(G(z)): 0.2281 / 0.0569
-    [1/5][600/1583] Loss_D: 0.6484  Loss_G: 3.7935  D(x): 0.9226    D(G(z)): 0.3621 / 0.0430
-    [1/5][650/1583] Loss_D: 0.4046  Loss_G: 3.5188  D(x): 0.7718    D(G(z)): 0.0785 / 0.0466
-    [1/5][700/1583] Loss_D: 0.3828  Loss_G: 3.7686  D(x): 0.8456    D(G(z)): 0.1629 / 0.0356
-    [1/5][750/1583] Loss_D: 0.3429  Loss_G: 3.2871  D(x): 0.8415    D(G(z)): 0.1288 / 0.0537
-    [1/5][800/1583] Loss_D: 0.5969  Loss_G: 2.2276  D(x): 0.6804    D(G(z)): 0.1041 / 0.1480
-    [1/5][850/1583] Loss_D: 0.3159  Loss_G: 3.0982  D(x): 0.8953    D(G(z)): 0.1433 / 0.0642
-    [1/5][900/1583] Loss_D: 0.3874  Loss_G: 3.3302  D(x): 0.7464    D(G(z)): 0.0371 / 0.0647
-    [1/5][950/1583] Loss_D: 0.4948  Loss_G: 2.8816  D(x): 0.7916    D(G(z)): 0.1907 / 0.0789
-    [1/5][1000/1583]        Loss_D: 1.6573  Loss_G: 7.0127  D(x): 0.9424    D(G(z)): 0.7226 / 0.0025
-    [1/5][1050/1583]        Loss_D: 1.5499  Loss_G: 6.3525  D(x): 0.9806    D(G(z)): 0.6892 / 0.0038
-    [1/5][1100/1583]        Loss_D: 1.0950  Loss_G: 1.0653  D(x): 0.4223    D(G(z)): 0.0170 / 0.4037
-    [1/5][1150/1583]        Loss_D: 0.7018  Loss_G: 1.5005  D(x): 0.5891    D(G(z)): 0.0653 / 0.2937
-    [1/5][1200/1583]        Loss_D: 0.7964  Loss_G: 2.3087  D(x): 0.5436    D(G(z)): 0.0342 / 0.1628
-    [1/5][1250/1583]        Loss_D: 0.3789  Loss_G: 2.5291  D(x): 0.7784    D(G(z)): 0.0832 / 0.1070
-    [1/5][1300/1583]        Loss_D: 0.5403  Loss_G: 4.1908  D(x): 0.9158    D(G(z)): 0.3228 / 0.0231
-    [1/5][1350/1583]        Loss_D: 0.8332  Loss_G: 4.4792  D(x): 0.8852    D(G(z)): 0.4410 / 0.0216
-    [1/5][1400/1583]        Loss_D: 0.5750  Loss_G: 1.1900  D(x): 0.6653    D(G(z)): 0.1016 / 0.3560
-    [1/5][1450/1583]        Loss_D: 0.3690  Loss_G: 3.2486  D(x): 0.9025    D(G(z)): 0.2074 / 0.0562
-    [1/5][1500/1583]        Loss_D: 0.5008  Loss_G: 3.5441  D(x): 0.7854    D(G(z)): 0.1774 / 0.0504
-    [1/5][1550/1583]        Loss_D: 0.5255  Loss_G: 3.0203  D(x): 0.8022    D(G(z)): 0.2163 / 0.0665
-    [2/5][0/1583]   Loss_D: 0.6246  Loss_G: 1.5438  D(x): 0.6513    D(G(z)): 0.1097 / 0.2620
-    [2/5][50/1583]  Loss_D: 0.7007  Loss_G: 3.7359  D(x): 0.8557    D(G(z)): 0.3665 / 0.0420
-    [2/5][100/1583] Loss_D: 0.5291  Loss_G: 2.6325  D(x): 0.7657    D(G(z)): 0.1902 / 0.0924
-    [2/5][150/1583] Loss_D: 0.7171  Loss_G: 0.9914  D(x): 0.5709    D(G(z)): 0.0644 / 0.4255
-    [2/5][200/1583] Loss_D: 0.4215  Loss_G: 2.7369  D(x): 0.7943    D(G(z)): 0.1434 / 0.0917
-    [2/5][250/1583] Loss_D: 0.6373  Loss_G: 1.9164  D(x): 0.6503    D(G(z)): 0.1253 / 0.1988
-    [2/5][300/1583] Loss_D: 1.6510  Loss_G: 4.5788  D(x): 0.9329    D(G(z)): 0.7047 / 0.0215
-    [2/5][350/1583] Loss_D: 0.9727  Loss_G: 1.0070  D(x): 0.4843    D(G(z)): 0.0626 / 0.4357
-    [2/5][400/1583] Loss_D: 0.9099  Loss_G: 1.2678  D(x): 0.4658    D(G(z)): 0.0400 / 0.3297
-    [2/5][450/1583] Loss_D: 0.5204  Loss_G: 3.4156  D(x): 0.8245    D(G(z)): 0.2391 / 0.0455
-    [2/5][500/1583] Loss_D: 0.7719  Loss_G: 1.5160  D(x): 0.6031    D(G(z)): 0.1349 / 0.2815
-    [2/5][550/1583] Loss_D: 0.4769  Loss_G: 3.0318  D(x): 0.8767    D(G(z)): 0.2689 / 0.0603
-    [2/5][600/1583] Loss_D: 0.9630  Loss_G: 2.9630  D(x): 0.8806    D(G(z)): 0.5169 / 0.0704
-    [2/5][650/1583] Loss_D: 0.7524  Loss_G: 3.8040  D(x): 0.9096    D(G(z)): 0.4440 / 0.0316
-    [2/5][700/1583] Loss_D: 0.6330  Loss_G: 3.0841  D(x): 0.8305    D(G(z)): 0.3139 / 0.0663
-    [2/5][750/1583] Loss_D: 1.0584  Loss_G: 4.6413  D(x): 0.9131    D(G(z)): 0.5577 / 0.0151
-    [2/5][800/1583] Loss_D: 1.1463  Loss_G: 4.8062  D(x): 0.8807    D(G(z)): 0.5852 / 0.0130
-    [2/5][850/1583] Loss_D: 0.6894  Loss_G: 2.0617  D(x): 0.6023    D(G(z)): 0.0835 / 0.1632
-    [2/5][900/1583] Loss_D: 0.7954  Loss_G: 4.0780  D(x): 0.8979    D(G(z)): 0.4428 / 0.0265
-    [2/5][950/1583] Loss_D: 1.2267  Loss_G: 5.2114  D(x): 0.9713    D(G(z)): 0.6521 / 0.0102
-    [2/5][1000/1583]        Loss_D: 0.6578  Loss_G: 1.7314  D(x): 0.7238    D(G(z)): 0.2322 / 0.2136
-    [2/5][1050/1583]        Loss_D: 0.5279  Loss_G: 2.1952  D(x): 0.7198    D(G(z)): 0.1381 / 0.1408
-    [2/5][1100/1583]        Loss_D: 0.5837  Loss_G: 3.3049  D(x): 0.8680    D(G(z)): 0.3201 / 0.0511
-    [2/5][1150/1583]        Loss_D: 1.3370  Loss_G: 3.8457  D(x): 0.9652    D(G(z)): 0.6542 / 0.0360
-    [2/5][1200/1583]        Loss_D: 1.1006  Loss_G: 1.2620  D(x): 0.4200    D(G(z)): 0.0513 / 0.3563
-    [2/5][1250/1583]        Loss_D: 1.3391  Loss_G: 3.8638  D(x): 0.9374    D(G(z)): 0.6683 / 0.0331
-    [2/5][1300/1583]        Loss_D: 1.2493  Loss_G: 0.8268  D(x): 0.4237    D(G(z)): 0.1461 / 0.5189
-    [2/5][1350/1583]        Loss_D: 0.7125  Loss_G: 3.8578  D(x): 0.8993    D(G(z)): 0.4162 / 0.0295
-    [2/5][1400/1583]        Loss_D: 0.6328  Loss_G: 1.6893  D(x): 0.6077    D(G(z)): 0.0702 / 0.2326
-    [2/5][1450/1583]        Loss_D: 0.8608  Loss_G: 1.6100  D(x): 0.5277    D(G(z)): 0.1139 / 0.2513
-    [2/5][1500/1583]        Loss_D: 1.0621  Loss_G: 4.1253  D(x): 0.9309    D(G(z)): 0.5720 / 0.0223
-    [2/5][1550/1583]        Loss_D: 0.5007  Loss_G: 2.5393  D(x): 0.6915    D(G(z)): 0.0761 / 0.1131
-    [3/5][0/1583]   Loss_D: 0.7389  Loss_G: 3.7663  D(x): 0.9317    D(G(z)): 0.4417 / 0.0355
-    [3/5][50/1583]  Loss_D: 0.7361  Loss_G: 3.7659  D(x): 0.8848    D(G(z)): 0.4145 / 0.0305
-    [3/5][100/1583] Loss_D: 0.8395  Loss_G: 3.9335  D(x): 0.9069    D(G(z)): 0.4803 / 0.0289
-    [3/5][150/1583] Loss_D: 0.9057  Loss_G: 5.0994  D(x): 0.9370    D(G(z)): 0.5231 / 0.0111
-    [3/5][200/1583] Loss_D: 1.6818  Loss_G: 1.1360  D(x): 0.2698    D(G(z)): 0.0192 / 0.3998
-    [3/5][250/1583] Loss_D: 0.6347  Loss_G: 2.8647  D(x): 0.8079    D(G(z)): 0.3038 / 0.0804
-    [3/5][300/1583] Loss_D: 0.5467  Loss_G: 1.9148  D(x): 0.7004    D(G(z)): 0.1313 / 0.1866
-    [3/5][350/1583] Loss_D: 0.6186  Loss_G: 3.2719  D(x): 0.8263    D(G(z)): 0.3034 / 0.0541
-    [3/5][400/1583] Loss_D: 0.5005  Loss_G: 2.5467  D(x): 0.7330    D(G(z)): 0.1419 / 0.1036
-    [3/5][450/1583] Loss_D: 0.7496  Loss_G: 1.6297  D(x): 0.5600    D(G(z)): 0.0810 / 0.2486
-    [3/5][500/1583] Loss_D: 0.5415  Loss_G: 2.4763  D(x): 0.8153    D(G(z)): 0.2561 / 0.1036
-    [3/5][550/1583] Loss_D: 1.0270  Loss_G: 1.4453  D(x): 0.5620    D(G(z)): 0.2534 / 0.2833
-    [3/5][600/1583] Loss_D: 0.5924  Loss_G: 1.8752  D(x): 0.6868    D(G(z)): 0.1529 / 0.1875
-    [3/5][650/1583] Loss_D: 0.6178  Loss_G: 1.6087  D(x): 0.6894    D(G(z)): 0.1667 / 0.2412
-    [3/5][700/1583] Loss_D: 1.3337  Loss_G: 4.8565  D(x): 0.9150    D(G(z)): 0.6487 / 0.0130
-    [3/5][750/1583] Loss_D: 0.7398  Loss_G: 4.2561  D(x): 0.9289    D(G(z)): 0.4493 / 0.0203
-    [3/5][800/1583] Loss_D: 0.6002  Loss_G: 2.2077  D(x): 0.7703    D(G(z)): 0.2510 / 0.1381
-    [3/5][850/1583] Loss_D: 0.6668  Loss_G: 1.3685  D(x): 0.6190    D(G(z)): 0.0946 / 0.3063
-    [3/5][900/1583] Loss_D: 0.4958  Loss_G: 2.3789  D(x): 0.6959    D(G(z)): 0.0896 / 0.1314
-    [3/5][950/1583] Loss_D: 1.6545  Loss_G: 1.2320  D(x): 0.2758    D(G(z)): 0.0724 / 0.3764
-    [3/5][1000/1583]        Loss_D: 0.9446  Loss_G: 3.8936  D(x): 0.9184    D(G(z)): 0.5277 / 0.0265
-    [3/5][1050/1583]        Loss_D: 1.0064  Loss_G: 3.9526  D(x): 0.8361    D(G(z)): 0.5170 / 0.0369
-    [3/5][1100/1583]        Loss_D: 1.1717  Loss_G: 4.6119  D(x): 0.9389    D(G(z)): 0.6207 / 0.0145
-    [3/5][1150/1583]        Loss_D: 0.7044  Loss_G: 2.3951  D(x): 0.7323    D(G(z)): 0.2748 / 0.1208
-    [3/5][1200/1583]        Loss_D: 0.8643  Loss_G: 3.6983  D(x): 0.8677    D(G(z)): 0.4656 / 0.0339
-    [3/5][1250/1583]        Loss_D: 0.6291  Loss_G: 1.2594  D(x): 0.6646    D(G(z)): 0.1502 / 0.3324
-    [3/5][1300/1583]        Loss_D: 0.6079  Loss_G: 2.2850  D(x): 0.6306    D(G(z)): 0.0764 / 0.1306
-    [3/5][1350/1583]        Loss_D: 0.4747  Loss_G: 2.2432  D(x): 0.7870    D(G(z)): 0.1774 / 0.1400
-    [3/5][1400/1583]        Loss_D: 0.7127  Loss_G: 2.6705  D(x): 0.7322    D(G(z)): 0.2866 / 0.0959
-    [3/5][1450/1583]        Loss_D: 0.7378  Loss_G: 1.6204  D(x): 0.6221    D(G(z)): 0.1602 / 0.2352
-    [3/5][1500/1583]        Loss_D: 0.6805  Loss_G: 2.6543  D(x): 0.7825    D(G(z)): 0.3100 / 0.0949
-    [3/5][1550/1583]        Loss_D: 0.5554  Loss_G: 2.2497  D(x): 0.7045    D(G(z)): 0.1483 / 0.1359
-    [4/5][0/1583]   Loss_D: 0.6762  Loss_G: 2.3307  D(x): 0.8219    D(G(z)): 0.3444 / 0.1209
-    [4/5][50/1583]  Loss_D: 0.6012  Loss_G: 2.4233  D(x): 0.7095    D(G(z)): 0.1891 / 0.1234
-    [4/5][100/1583] Loss_D: 0.4908  Loss_G: 2.0864  D(x): 0.7205    D(G(z)): 0.1117 / 0.1572
-    [4/5][150/1583] Loss_D: 0.8198  Loss_G: 4.0416  D(x): 0.8430    D(G(z)): 0.4247 / 0.0272
-    [4/5][200/1583] Loss_D: 0.6902  Loss_G: 2.7898  D(x): 0.7555    D(G(z)): 0.2982 / 0.0799
-    [4/5][250/1583] Loss_D: 0.9696  Loss_G: 1.9208  D(x): 0.4559    D(G(z)): 0.0411 / 0.2028
-    [4/5][300/1583] Loss_D: 1.0947  Loss_G: 4.4635  D(x): 0.8949    D(G(z)): 0.5628 / 0.0175
-    [4/5][350/1583] Loss_D: 0.5482  Loss_G: 2.7329  D(x): 0.7936    D(G(z)): 0.2371 / 0.0839
-    [4/5][400/1583] Loss_D: 1.3615  Loss_G: 5.5092  D(x): 0.9303    D(G(z)): 0.6834 / 0.0060
-    [4/5][450/1583] Loss_D: 0.6625  Loss_G: 1.6850  D(x): 0.6717    D(G(z)): 0.1845 / 0.2199
-    [4/5][500/1583] Loss_D: 0.6969  Loss_G: 3.9459  D(x): 0.8863    D(G(z)): 0.4006 / 0.0248
-    [4/5][550/1583] Loss_D: 0.4673  Loss_G: 2.7287  D(x): 0.7979    D(G(z)): 0.1833 / 0.0865
-    [4/5][600/1583] Loss_D: 0.6350  Loss_G: 2.0407  D(x): 0.7235    D(G(z)): 0.2200 / 0.1790
-    [4/5][650/1583] Loss_D: 0.5745  Loss_G: 2.1268  D(x): 0.7324    D(G(z)): 0.1870 / 0.1507
-    [4/5][700/1583] Loss_D: 0.5850  Loss_G: 2.4498  D(x): 0.7536    D(G(z)): 0.2241 / 0.1112
-    [4/5][750/1583] Loss_D: 0.5308  Loss_G: 2.6729  D(x): 0.8249    D(G(z)): 0.2581 / 0.0858
-    [4/5][800/1583] Loss_D: 0.5553  Loss_G: 2.1394  D(x): 0.7571    D(G(z)): 0.2094 / 0.1457
-    [4/5][850/1583] Loss_D: 0.5873  Loss_G: 1.6425  D(x): 0.6714    D(G(z)): 0.1223 / 0.2363
-    [4/5][900/1583] Loss_D: 0.6673  Loss_G: 2.1069  D(x): 0.6494    D(G(z)): 0.1553 / 0.1587
-    [4/5][950/1583] Loss_D: 0.5987  Loss_G: 1.9453  D(x): 0.6493    D(G(z)): 0.0833 / 0.1781
-    [4/5][1000/1583]        Loss_D: 1.0392  Loss_G: 3.1166  D(x): 0.8597    D(G(z)): 0.5166 / 0.0650
-    [4/5][1050/1583]        Loss_D: 0.5178  Loss_G: 1.8653  D(x): 0.7228    D(G(z)): 0.1370 / 0.1977
-    [4/5][1100/1583]        Loss_D: 0.5831  Loss_G: 3.1818  D(x): 0.8104    D(G(z)): 0.2762 / 0.0547
-    [4/5][1150/1583]        Loss_D: 1.2313  Loss_G: 0.5121  D(x): 0.3851    D(G(z)): 0.0530 / 0.6403
-    [4/5][1200/1583]        Loss_D: 0.5152  Loss_G: 2.5895  D(x): 0.8097    D(G(z)): 0.2372 / 0.0923
-    [4/5][1250/1583]        Loss_D: 0.7476  Loss_G: 4.3407  D(x): 0.9244    D(G(z)): 0.4451 / 0.0185
-    [4/5][1300/1583]        Loss_D: 0.5440  Loss_G: 2.2089  D(x): 0.6751    D(G(z)): 0.0882 / 0.1476
-    [4/5][1350/1583]        Loss_D: 0.6189  Loss_G: 4.0647  D(x): 0.9326    D(G(z)): 0.3872 / 0.0238
-    [4/5][1400/1583]        Loss_D: 0.5347  Loss_G: 3.5654  D(x): 0.9122    D(G(z)): 0.3203 / 0.0389
-    [4/5][1450/1583]        Loss_D: 0.5358  Loss_G: 2.5327  D(x): 0.8204    D(G(z)): 0.2511 / 0.1035
-    [4/5][1500/1583]        Loss_D: 0.5355  Loss_G: 1.7248  D(x): 0.6767    D(G(z)): 0.0872 / 0.2329
-    [4/5][1550/1583]        Loss_D: 0.5651  Loss_G: 2.3393  D(x): 0.6977    D(G(z)): 0.1304 / 0.1316
-
-
 Results
 -------
 
@@ -999,14 +725,6 @@ Below is a plot of D & G’s losses versus training iterations.
 
 
 
-
-
-.. image:: /beginner/images/sphx_glr_dcgan_faces_tutorial_002.png
-    :class: sphx-glr-single-img
-
-
-
-
 **Visualization of G’s progression**
 
 Remember how we saved the generator’s output on the fixed_noise batch
@@ -1026,14 +744,6 @@ animation.
     ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit=True)
 
     HTML(ani.to_jshtml())
-
-
-
-
-
-.. image:: /beginner/images/sphx_glr_dcgan_faces_tutorial_003.png
-    :class: sphx-glr-single-img
-
 
 
 
@@ -1066,14 +776,6 @@ side.
 
 
 
-
-
-.. image:: /beginner/images/sphx_glr_dcgan_faces_tutorial_004.png
-    :class: sphx-glr-single-img
-
-
-
-
 Where to Go Next
 ----------------
 
@@ -1092,7 +794,7 @@ could go from here. You could:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 28 minutes  41.545 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_beginner_dcgan_faces_tutorial.py:

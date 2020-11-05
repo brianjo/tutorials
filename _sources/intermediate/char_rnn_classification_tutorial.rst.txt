@@ -123,19 +123,6 @@ We'll end up with a dictionary of lists of names per language,
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    ['data/names/French.txt', 'data/names/Czech.txt', 'data/names/Dutch.txt', 'data/names/Polish.txt', 'data/names/Scottish.txt', 'data/names/Chinese.txt', 'data/names/English.txt', 'data/names/Italian.txt', 'data/names/Portuguese.txt', 'data/names/Japanese.txt', 'data/names/German.txt', 'data/names/Russian.txt', 'data/names/Korean.txt', 'data/names/Arabic.txt', 'data/names/Greek.txt', 'data/names/Vietnamese.txt', 'data/names/Spanish.txt', 'data/names/Irish.txt']
-    Slusarski
-
-
 Now we have ``category_lines``, a dictionary mapping each category
 (language) to a list of lines (names). We also kept track of
 ``all_categories`` (just a list of languages) and ``n_categories`` for
@@ -148,18 +135,6 @@ later reference.
 
     print(category_lines['Italian'][:5])
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    ['Abandonato', 'Abatangelo', 'Abatantuono', 'Abate', 'Abategiovanni']
 
 
 Turning Names into Tensors
@@ -207,22 +182,6 @@ batches - we're just using a batch size of 1 here.
 
     print(lineToTensor('Jones').size())
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-             0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1.,
-             0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-             0., 0., 0.]])
-    torch.Size([5, 1, 57])
 
 
 Creating the Network
@@ -276,11 +235,6 @@ a LogSoftmax layer after the output.
 
 
 
-
-
-
-
-
 To run a step of this network we need to pass an input (in our case, the
 Tensor for the current letter) and a previous hidden state (which we
 initialize as zeros at first). We'll get back the output (probability of
@@ -296,11 +250,6 @@ step).
     hidden =torch.zeros(1, n_hidden)
 
     output, next_hidden = rnn(input, hidden)
-
-
-
-
-
 
 
 
@@ -320,20 +269,6 @@ pre-computing batches of Tensors.
     output, next_hidden = rnn(input[0], hidden)
     print(output)
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[-2.9352, -2.8619, -2.9274, -2.8298, -2.9604, -2.9079, -2.8467, -2.9916,
-             -2.9366, -2.8523, -2.9476, -2.9040, -2.7813, -2.9815, -2.8035, -2.8033,
-             -2.8675, -2.9227]], grad_fn=<LogSoftmaxBackward>)
 
 
 As you can see the output is a ``<1 x n_categories>`` Tensor, where
@@ -364,18 +299,6 @@ of the greatest value:
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    ('Korean', 12)
-
-
 We will also want a quick way to get a training example (a name and its
 language):
 
@@ -402,27 +325,6 @@ language):
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    category = Japanese / line = Hiroyuki
-    category = Portuguese / line = Alves
-    category = Portuguese / line = Pinho
-    category = Korean / line = Si
-    category = Polish / line = Kumiega
-    category = English / line = Farrer
-    category = Irish / line = Finnegan
-    category = Korean / line = Chu
-    category = Arabic / line = Zogby
-    category = Italian / line = Amadei
-
-
 Training the Network
 --------------------
 
@@ -438,11 +340,6 @@ layer of the RNN is ``nn.LogSoftmax``.
 
 
     criterion = nn.NLLLoss()
-
-
-
-
-
 
 
 
@@ -481,11 +378,6 @@ Each loop of training will:
             p.data.add_(p.grad.data, alpha=-learning_rate)
 
         return output, loss.item()
-
-
-
-
-
 
 
 
@@ -540,37 +432,6 @@ average of the loss.
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    5000 5% (0m 15s) 0.3417 Protopsaltis / Greek ✓
-    10000 10% (0m 27s) 1.1744 Ghannam / Arabic ✓
-    15000 15% (0m 40s) 1.8839 Oichi / Italian ✗ (Japanese)
-    20000 20% (0m 52s) 1.5283 Toshishai / Japanese ✓
-    25000 25% (1m 4s) 1.0133 Guerra / Portuguese ✓
-    30000 30% (1m 16s) 0.3382 Dikovsky / Russian ✓
-    35000 35% (1m 28s) 1.0291 Flater / German ✓
-    40000 40% (1m 40s) 0.4053 Milionis / Greek ✓
-    45000 45% (1m 52s) 0.4740 Rademakers / Dutch ✓
-    50000 50% (2m 4s) 1.8028 Lobo / Portuguese ✓
-    55000 55% (2m 16s) 0.7659 Albano / Italian ✓
-    60000 60% (2m 28s) 0.9766 Aggelen / Dutch ✓
-    65000 65% (2m 40s) 0.3589 Avilov / Russian ✓
-    70000 70% (2m 52s) 1.7270 Zamorano / Italian ✗ (Spanish)
-    75000 75% (3m 3s) 2.1909 Grabski / Polish ✗ (Czech)
-    80000 80% (3m 14s) 0.9289 Sacco / Italian ✓
-    85000 85% (3m 26s) 3.1579 Harman / Arabic ✗ (French)
-    90000 90% (3m 37s) 0.1975 Kajiyama / Japanese ✓
-    95000 95% (3m 49s) 0.2375 Bukowski / Polish ✓
-    100000 100% (4m 0s) 0.8295 Schuchard / German ✓
-
-
 Plotting the Results
 --------------------
 
@@ -587,14 +448,6 @@ learning:
 
     plt.figure()
     plt.plot(all_losses)
-
-
-
-
-
-.. image:: /intermediate/images/sphx_glr_char_rnn_classification_tutorial_001.png
-    :class: sphx-glr-single-img
-
 
 
 
@@ -656,14 +509,6 @@ matrix a bunch of samples are run through the network with
 
 
 
-
-
-.. image:: /intermediate/images/sphx_glr_char_rnn_classification_tutorial_002.png
-    :class: sphx-glr-single-img
-
-
-
-
 You can pick out bright spots off the main axis that show which
 languages it guesses incorrectly, e.g. Chinese for Korean, and Spanish
 for Italian. It seems to do very well with Greek, and very poorly with
@@ -697,31 +542,6 @@ Running on User Input
     predict('Jackson')
     predict('Satoshi')
 
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    > Dovesky
-    (-0.59) Czech
-    (-1.17) Russian
-    (-2.64) Polish
-
-    > Jackson
-    (-0.54) Scottish
-    (-2.45) Czech
-    (-2.51) English
-
-    > Satoshi
-    (-0.49) Polish
-    (-1.99) Arabic
-    (-2.08) Japanese
 
 
 The final versions of the scripts `in the Practical PyTorch
@@ -769,7 +589,7 @@ Exercises
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  12.574 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_intermediate_char_rnn_classification_tutorial.py:

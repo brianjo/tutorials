@@ -81,170 +81,172 @@ Download the `torchvision resnet18 model <https://github.com/pytorch/vision/blob
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+    import numpy as np
+    import torch
+    import torch.nn as nn
+    import torchvision
+    from torch.utils.data import DataLoader
+    from torchvision import datasets
+    import torchvision.transforms as transforms
+    import os
+    import time
+    import sys
+    import torch.quantization
 
     # # Setup warnings
-
-
-
-
-
-
-
-
-
-
+    import warnings
+    warnings.filterwarnings(
+        action='ignore',
+        category=DeprecationWarning,
+        module=r'.*'
+    )
+    warnings.filterwarnings(
+        action='default',
+        module=r'torch.quantization'
+    )
 
     # Specify random seed for repeatable results
+    _ = torch.manual_seed(191009)
+
+
+    from torchvision.models.resnet import resnet18
+    from torch.quantization import get_default_qconfig, quantize_jit
+
+    class AverageMeter(object):
+        """Computes and stores the average and current value"""
+        def __init__(self, name, fmt=':f'):
+            self.name = name
+            self.fmt = fmt
+            self.reset()
+
+        def reset(self):
+            self.val = 0
+            self.avg = 0
+            self.sum = 0
+            self.count = 0
+
+        def update(self, val, n=1):
+            self.val = val
+            self.sum += val * n
+            self.count += n
+            self.avg = self.sum / self.count
+
+        def __str__(self):
+            fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
+            return fmtstr.format(**self.__dict__)
+
+
+    def accuracy(output, target, topk=(1,)):
+        """Computes the accuracy over the k top predictions for the specified values of k"""
+        with torch.no_grad():
+            maxk = max(topk)
+            batch_size = target.size(0)
+
+            _, pred = output.topk(maxk, 1, True, True)
+            pred = pred.t()
+            correct = pred.eq(target.view(1, -1).expand_as(pred))
+
+            res = []
+            for k in topk:
+                correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
+                res.append(correct_k.mul_(100.0 / batch_size))
+            return res
+
+
+    def evaluate(model, criterion, data_loader):
+        model.eval()
+        top1 = AverageMeter('Acc@1', ':6.2f')
+        top5 = AverageMeter('Acc@5', ':6.2f')
+        cnt = 0
+        with torch.no_grad():
+            for image, target in data_loader:
+                output = model(image)
+                loss = criterion(output, target)
+                cnt += 1
+                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                top1.update(acc1[0], image.size(0))
+                top5.update(acc5[0], image.size(0))
+        print('')
+
+        return top1, top5
+
+    def load_model(model_file):
+        model = resnet18(pretrained=False)
+        state_dict = torch.load(model_file)
+        model.load_state_dict(state_dict)
+        model.to('cpu')
+        return model
+
+    def print_size_of_model(model):
+        if isinstance(model, torch.jit.RecursiveScriptModule):
+            torch.jit.save(model, "temp.p")
+        else:
+            torch.jit.save(torch.jit.script(model), "temp.p")
+        print('Size (MB):', os.path.getsize("temp.p")/1e6)
+        os.remove('temp.p')
+
+    def prepare_data_loaders(data_path):
+
+        traindir = os.path.join(data_path, 'train')
+        valdir = os.path.join(data_path, 'val')
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                         std=[0.229, 0.224, 0.225])
+
+        dataset = torchvision.datasets.ImageFolder(
+            traindir,
+            transforms.Compose([
+                transforms.RandomResizedCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                normalize,
+            ]))
+
+        dataset_test = torchvision.datasets.ImageFolder(
+            valdir,
+            transforms.Compose([
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                normalize,
+            ]))
 
+        train_sampler = torch.utils.data.RandomSampler(dataset)
+        test_sampler = torch.utils.data.SequentialSampler(dataset_test)
 
+        data_loader = torch.utils.data.DataLoader(
+            dataset, batch_size=train_batch_size,
+            sampler=train_sampler)
 
+        data_loader_test = torch.utils.data.DataLoader(
+            dataset_test, batch_size=eval_batch_size,
+            sampler=test_sampler)
 
+        return data_loader, data_loader_test
 
+    data_path = 'data/imagenet_1k'
+    saved_model_dir = 'data/'
+    float_model_file = 'resnet18_pretrained_float.pth'
 
+    train_batch_size = 30
+    eval_batch_size = 30
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    data_loader, data_loader_test = prepare_data_loaders(data_path)
+    criterion = nn.CrossEntropyLoss()
+    float_model = load_model(saved_model_dir + float_model_file).to('cpu')
+    float_model.eval();
 
 
 
 3. Script/Trace the model
 --------------------------
 The input for graph mode quantization is a TorchScript model, so we'll need to either script or trace the model first.
+
+
+
+.. code-block:: default
+
+
+    ts_model = torch.jit.script(float_model).eval() # ts_model = torch.jit.trace(float_model, input)
 
 
 4. Specify how to quantize the model with ``qconfig_dict``
@@ -270,6 +272,15 @@ Right now ``qconfig_dict`` is the only way to configure how the model is quantiz
 Module ``sub.fc`` will be configured with ``qconfig_fc``, and all other child modules in ``sub`` will be configured with ``qconfig_sub`` and ``sub.conv`` will not be quantized. All other modules in the model will be quantized with ``qconfig_global``
 Utility functions related to ``qconfig`` can be found in https://github.com/pytorch/pytorch/blob/master/torch/quantization/qconfig.py.
 
+
+.. code-block:: default
+
+
+    qconfig = get_default_qconfig('fbgemm')
+    qconfig_dict = {'': qconfig}
+
+
+
 5. Define Calibration Function
 -------------------------
 
@@ -283,6 +294,18 @@ Calibration function is run after the observers are inserted in the model.
 The purpose for calibration is to run through some sample examples that is representative of the workload 
 (for example a sample of the training data set) so that the observers in the model are able to observe
 the statistics of the Tensors and we can later use this information to calculate quantization parameters.
+
+
+
+.. code-block:: default
+
+
+    def calibrate(model, data_loader):
+        model.eval()
+        with torch.no_grad():
+            for image, target in data_loader:
+                model(image)
+
 
 
 6. Quantize
@@ -317,6 +340,19 @@ If ``debug`` is set to ``True``:
 - We can still access the attributes of the quantized model the same way as the original floating point model, e.g. ``model.conv1.weight`` (might be harder if you use a module list or sequential)
 - The arithmetic operations all occur in floating point with the numerics being identical to the final quantized model, allowing for debugging.
 
+
+.. code-block:: default
+
+
+    quantized_model = quantize_jit(
+        ts_model,
+        {'': qconfig},
+        calibrate,
+        [data_loader_test])
+
+    print(quantized_model.graph)
+
+
 As we can see ``aten::conv2d`` is changed to ``quantized::conv2d`` and the floating point weight has been quantized 
 and packed into an attribute (``quantized._jit_pass_packed_weight_30``), so we don't need to quantize/pack in runtime.
 Also we can't access the weight attributes anymore after the debug option since they are frozen.
@@ -324,6 +360,24 @@ Also we can't access the weight attributes anymore after the debug option since 
 7. Evaluation
 --------------
 We can now print the size and accuracy of the quantized model.
+
+
+.. code-block:: default
+
+
+    print('Size of model before quantization')
+    print_size_of_model(ts_model)
+    print('Size of model after quantization')
+    print_size_of_model(quantized_model)
+    top1, top5 = evaluate(quantized_model, criterion, data_loader_test)
+    print('[before serilaization] Evaluation accuracy on test dataset: %2.2f, %2.2f'%(top1.avg, top5.avg))
+
+    graph_mode_model_file = 'resnet18_graph_mode_quantized.pth'
+    torch.jit.save(quantized_model, saved_model_dir + graph_mode_model_file)
+    quantized_model = torch.jit.load(saved_model_dir + graph_mode_model_file)
+    top1, top5 = evaluate(quantized_model, criterion, data_loader_test)
+    print('[after serialization/deserialization] Evaluation accuracy on test dataset: %2.2f, %2.2f'%(top1.avg, top5.avg))
+
 
 If you want to get better accuracy or performance,  try changing the `qconfig_dict`. 
 We plan to add support for graph mode in the Numerical Suite so that you can 
@@ -333,13 +387,42 @@ easily determine the sensitivity towards quantization of different modules in a 
 ---------------------------
 We can also use debug option:
 
+
+.. code-block:: default
+
+
+    quantized_debug_model = quantize_jit(
+        ts_model,
+        {'': qconfig},
+        calibrate,
+        [data_loader_test],
+        debug=True)
+
+    top1, top5 = evaluate(quantized_debug_model, criterion, data_loader_test)
+    print('[debug=True] quantized model Evaluation accuracy on test dataset: %2.2f, %2.2f'%(top1.avg, top5.avg))
+
+
 Note that the accuracy of the debug version is close to, but not exactly the same as the non-debug 
 version as the debug version uses floating point ops to emulate quantized ops and the numerics match 
 is approximate. We are working on making this even more exact.
 
 
+
+.. code-block:: default
+
+
+    print(quantized_debug_model.graph)
+
+
 We can see that there is no ``quantized::conv2d`` in the model, but the numerically equivalent pattern 
 of ``aten::dequnatize - aten::conv2d - aten::quantize_per_tensor``.
+
+
+.. code-block:: default
+
+
+    print_size_of_model(quantized_debug_model)
+
 
 Size of the debug model is the close to the floating point model because all the weights are 
 in float and not yet quantized and frozen, this allows people to inspect the weight. 
@@ -347,6 +430,18 @@ You may access the weight attributes directly in the torchscript model, except f
 it is fused into the preceding convolutions. We will also develop graph mode ``Numeric Suite`` 
 to allow easier inspection of weights in the future. Accessing the weight in the debug model is 
 the same as accessing the weight in a TorchScript model:
+
+
+.. code-block:: default
+
+
+    def get_first_conv_weight(model):
+        return model.conv1.weight
+    w1 = get_first_conv_weight(ts_model)
+    w2 = get_first_conv_weight(quantized_debug_model)
+    print('first conv weight for input model:', str(w1)[:200])
+    print('first conv weight for quantized model:', str(w2)[:200])
+
 
 The weights are different because we fold the weights of BatchNorm to the previous conv before we quantize the model.
 More instructions on how to debug TorchScript model can be found `here <https://pytorch.org/docs/stable/jit.html#debugging>`_.
@@ -358,9 +453,43 @@ and it will probably be the primary tool people use to debug numerical issues.
 9. Comparison with Baseline Float Model and Eager Mode Quantization
 ---------------------------
 
+
+.. code-block:: default
+
+
+    scripted_float_model_file = 'resnet18_scripted.pth'
+
+    print('Size of baseline model')
+    print_size_of_model(float_model)
+
+    top1, top5 = evaluate(float_model, criterion, data_loader_test)
+    print('Baseline Float Model Evaluation accuracy: %2.2f, %2.2f'%(top1.avg, top5.avg))
+    torch.jit.save(torch.jit.script(float_model), saved_model_dir + scripted_float_model_file)
+
+
 In this section we compare the model quantized with graph mode quantization with the model 
 quantized in eager mode. Graph mode and eager mode produce very similar quantized models, 
 so the expectation is that the accuracy and speedup are similar as well.
+
+
+.. code-block:: default
+
+
+    print('Size of graph mode quantized model')
+    print_size_of_model(quantized_model)
+    top1, top5 = evaluate(quantized_model, criterion, data_loader_test)
+    print('graph mode quantized model Evaluation accuracy on test dataset: %2.2f, %2.2f'%(top1.avg, top5.avg))
+
+    from torchvision.models.quantization.resnet import resnet18
+    eager_quantized_model = resnet18(pretrained=True, quantize=True).eval()
+    print('Size of eager mode quantized model')
+    eager_quantized_model = torch.jit.script(eager_quantized_model)
+    print_size_of_model(eager_quantized_model)
+    top1, top5 = evaluate(eager_quantized_model, criterion, data_loader_test)
+    print('eager mode quantized model Evaluation accuracy on test dataset: %2.2f, %2.2f'%(top1.avg, top5.avg))
+    eager_mode_model_file = 'resnet18_eager_mode_quantized.pth'
+    torch.jit.save(eager_quantized_model, saved_model_dir + eager_mode_model_file)
+
 
 We can see that the model size and accuracy of graph mode and eager mode quantized model are pretty similar.
 
@@ -383,21 +512,9 @@ depending on model, device, build, input batch sizes, threading etc.
 
 
 
-.. code-block:: default
-
-
-
-
-    # %%%%%%RUNNABLE_CODE_REMOVED%%%%%%
-
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.024 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_prototype_graph_mode_static_quantization_tutorial.py:

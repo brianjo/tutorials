@@ -363,8 +363,8 @@
 <p>For additional details on Graph Mode Quantization please refer to the <a class="reference external" href="https://pytorch.org/tutorials/prototype/graph_mode_static_quantization_tutorial.html">Graph Mode Static Quantization Tutorial</a>.</p>
 <p>tl;dr The Graph Mode Dynamic <a class="reference external" href="https://pytorch.org/docs/master/quantization.html#torch-quantization">Quantization API</a>:</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="kn">import</span> <span class="n">per_channel_dynamic_qconfig</span>
-<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="kn">import</span> <span class="n">quantize_dynamic_jit</span>
+<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="k">import</span> <span class="n">per_channel_dynamic_qconfig</span>
+<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="k">import</span> <span class="n">quantize_dynamic_jit</span>
 
 <span class="n">ts_model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span><span class="p">(</span><span class="n">float_model</span><span class="p">)</span> <span class="c1"># or torch.jit.trace(float_model, input)</span>
 
@@ -378,7 +378,7 @@
 <div class="section" id="setup">
 <h3>1.1 Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
 <p>Once all the necesessary packages are downloaded and installed we setup the code. We first start with the necessary imports and setup for the model.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -388,17 +388,17 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Namespace</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="p">(</span><span class="n">DataLoader</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="k">import</span> <span class="n">Namespace</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="k">import</span> <span class="p">(</span><span class="n">DataLoader</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span><span class="p">,</span>
                               <span class="n">TensorDataset</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="p">(</span><span class="n">BertConfig</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">BertTokenizer</span><span class="p">,)</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">glue_compute_metrics</span> <span class="k">as</span> <span class="n">compute_metrics</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">glue_output_modes</span> <span class="k">as</span> <span class="n">output_modes</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">glue_processors</span> <span class="k">as</span> <span class="n">processors</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">glue_convert_examples_to_features</span> <span class="k">as</span> <span class="n">convert_examples_to_features</span>
-<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="kn">import</span> <span class="n">per_channel_dynamic_qconfig</span>
-<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="kn">import</span> <span class="n">quantize_dynamic_jit</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="k">import</span> <span class="p">(</span><span class="n">BertConfig</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">BertTokenizer</span><span class="p">,)</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="k">import</span> <span class="n">glue_compute_metrics</span> <span class="k">as</span> <span class="n">compute_metrics</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="k">import</span> <span class="n">glue_output_modes</span> <span class="k">as</span> <span class="n">output_modes</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="k">import</span> <span class="n">glue_processors</span> <span class="k">as</span> <span class="n">processors</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="k">import</span> <span class="n">glue_convert_examples_to_features</span> <span class="k">as</span> <span class="n">convert_examples_to_features</span>
+<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="k">import</span> <span class="n">per_channel_dynamic_qconfig</span>
+<span class="kn">from</span> <span class="nn">torch.quantization</span> <span class="k">import</span> <span class="n">quantize_dynamic_jit</span>
 
 <span class="n">global_rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
 

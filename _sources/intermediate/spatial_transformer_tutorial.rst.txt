@@ -50,11 +50,6 @@ any existing CNN with very little modification.
     plt.ion()   # interactive mode
 
 
-
-
-
-
-
 Loading the data
 ----------------
 
@@ -81,27 +76,6 @@ network.
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
         ])), batch_size=64, shuffle=True, num_workers=4)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
-    Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
-    Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./MNIST/raw/train-labels-idx1-ubyte.gz
-    Extracting ./MNIST/raw/train-labels-idx1-ubyte.gz to ./MNIST/raw
-    Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./MNIST/raw/t10k-images-idx3-ubyte.gz
-    Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
-    Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./MNIST/raw/t10k-labels-idx1-ubyte.gz
-    Extracting ./MNIST/raw/t10k-labels-idx1-ubyte.gz to ./MNIST/raw
-    Processing...
-    Done!
 
 
 Depicting spatial transformer networks
@@ -189,11 +163,6 @@ Spatial transformer networks boils down to three main components :
     model = Net().to(device)
 
 
-
-
-
-
-
 Training the model
 ------------------
 
@@ -247,11 +216,6 @@ the model is learning STN automatically in an end-to-end fashion.
             print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'
                   .format(test_loss, correct, len(test_loader.dataset),
                           100. * correct / len(test_loader.dataset)))
-
-
-
-
-
 
 
 Visualizing the STN results
@@ -315,122 +279,9 @@ transformations while training.
     plt.show()
 
 
-
-.. image:: /intermediate/images/sphx_glr_spatial_transformer_tutorial_001.png
-    :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Train Epoch: 1 [0/60000 (0%)]   Loss: 2.319235
-    Train Epoch: 1 [32000/60000 (53%)]      Loss: 0.897658
-
-    Test set: Average loss: 0.2179, Accuracy: 9398/10000 (94%)
-
-    Train Epoch: 2 [0/60000 (0%)]   Loss: 0.506354
-    Train Epoch: 2 [32000/60000 (53%)]      Loss: 0.381753
-
-    Test set: Average loss: 0.1346, Accuracy: 9589/10000 (96%)
-
-    Train Epoch: 3 [0/60000 (0%)]   Loss: 0.268671
-    Train Epoch: 3 [32000/60000 (53%)]      Loss: 0.205107
-
-    Test set: Average loss: 0.1280, Accuracy: 9608/10000 (96%)
-
-    Train Epoch: 4 [0/60000 (0%)]   Loss: 0.617213
-    Train Epoch: 4 [32000/60000 (53%)]      Loss: 0.224908
-
-    Test set: Average loss: 0.0956, Accuracy: 9704/10000 (97%)
-
-    Train Epoch: 5 [0/60000 (0%)]   Loss: 0.130595
-    Train Epoch: 5 [32000/60000 (53%)]      Loss: 0.126290
-
-    Test set: Average loss: 0.0968, Accuracy: 9708/10000 (97%)
-
-    Train Epoch: 6 [0/60000 (0%)]   Loss: 0.191345
-    Train Epoch: 6 [32000/60000 (53%)]      Loss: 0.170248
-
-    Test set: Average loss: 0.0681, Accuracy: 9778/10000 (98%)
-
-    Train Epoch: 7 [0/60000 (0%)]   Loss: 0.242206
-    Train Epoch: 7 [32000/60000 (53%)]      Loss: 0.122461
-
-    Test set: Average loss: 0.0552, Accuracy: 9835/10000 (98%)
-
-    Train Epoch: 8 [0/60000 (0%)]   Loss: 0.176119
-    Train Epoch: 8 [32000/60000 (53%)]      Loss: 0.135269
-
-    Test set: Average loss: 0.0678, Accuracy: 9794/10000 (98%)
-
-    Train Epoch: 9 [0/60000 (0%)]   Loss: 0.090398
-    Train Epoch: 9 [32000/60000 (53%)]      Loss: 0.036822
-
-    Test set: Average loss: 0.0575, Accuracy: 9826/10000 (98%)
-
-    Train Epoch: 10 [0/60000 (0%)]  Loss: 0.199067
-    Train Epoch: 10 [32000/60000 (53%)]     Loss: 0.153171
-
-    Test set: Average loss: 0.2782, Accuracy: 9188/10000 (92%)
-
-    Train Epoch: 11 [0/60000 (0%)]  Loss: 0.557813
-    Train Epoch: 11 [32000/60000 (53%)]     Loss: 0.156259
-
-    Test set: Average loss: 0.0471, Accuracy: 9850/10000 (98%)
-
-    Train Epoch: 12 [0/60000 (0%)]  Loss: 0.163213
-    Train Epoch: 12 [32000/60000 (53%)]     Loss: 0.103717
-
-    Test set: Average loss: 0.0436, Accuracy: 9859/10000 (99%)
-
-    Train Epoch: 13 [0/60000 (0%)]  Loss: 0.069089
-    Train Epoch: 13 [32000/60000 (53%)]     Loss: 0.108866
-
-    Test set: Average loss: 0.0420, Accuracy: 9865/10000 (99%)
-
-    Train Epoch: 14 [0/60000 (0%)]  Loss: 0.024803
-    Train Epoch: 14 [32000/60000 (53%)]     Loss: 0.082752
-
-    Test set: Average loss: 0.0411, Accuracy: 9866/10000 (99%)
-
-    Train Epoch: 15 [0/60000 (0%)]  Loss: 0.043728
-    Train Epoch: 15 [32000/60000 (53%)]     Loss: 0.076953
-
-    Test set: Average loss: 0.0373, Accuracy: 9883/10000 (99%)
-
-    Train Epoch: 16 [0/60000 (0%)]  Loss: 0.142454
-    Train Epoch: 16 [32000/60000 (53%)]     Loss: 0.122864
-
-    Test set: Average loss: 0.0422, Accuracy: 9866/10000 (99%)
-
-    Train Epoch: 17 [0/60000 (0%)]  Loss: 0.147079
-    Train Epoch: 17 [32000/60000 (53%)]     Loss: 0.067408
-
-    Test set: Average loss: 0.0468, Accuracy: 9862/10000 (99%)
-
-    Train Epoch: 18 [0/60000 (0%)]  Loss: 0.043013
-    Train Epoch: 18 [32000/60000 (53%)]     Loss: 0.070166
-
-    Test set: Average loss: 0.0631, Accuracy: 9813/10000 (98%)
-
-    Train Epoch: 19 [0/60000 (0%)]  Loss: 0.110407
-    Train Epoch: 19 [32000/60000 (53%)]     Loss: 0.088142
-
-    Test set: Average loss: 0.0386, Accuracy: 9875/10000 (99%)
-
-    Train Epoch: 20 [0/60000 (0%)]  Loss: 0.043327
-    Train Epoch: 20 [32000/60000 (53%)]     Loss: 0.089684
-
-    Test set: Average loss: 0.0395, Accuracy: 9884/10000 (99%)
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  14.272 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_intermediate_spatial_transformer_tutorial.py:

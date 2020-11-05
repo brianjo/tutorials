@@ -1,122 +1,188 @@
 
-<!DOCTYPE html>
 
+
+<!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>DCGAN Tutorial — PyTorch Tutorials 1.7.0 documentation</title>
-<link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
-<!-- <link rel="stylesheet" href="../_static/pygments.css" type="text/css" /> -->
-<link href="../_static/gallery.css" rel="stylesheet" type="text/css"/>
-<link href="../genindex.html" rel="index" title="Index"/>
-<link href="../search.html" rel="search" title="Search"/>
-<link href="audio_preprocessing_tutorial.html" rel="next" title="Audio I/O and Pre-Processing with torchaudio"/>
-<link href="fgsm_tutorial.html" rel="prev" title="Adversarial Example Generation"/>
-<script src="../_static/js/modernizr.min.js"></script>
-<!-- Preload the theme fonts -->
-<link as="font" crossorigin="anonymous" href="../_static/fonts/FreightSans/freight-sans-book.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="../_static/fonts/FreightSans/freight-sans-medium.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="../_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="../_static/fonts/FreightSans/freight-sans-bold.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="../_static/fonts/FreightSans/freight-sans-medium-italic.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="../_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" rel="preload" type="font/woff2"/>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DCGAN Tutorial &mdash; PyTorch Tutorials 1.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Audio I/O and Pre-Processing with torchaudio" href="audio_preprocessing_tutorial.html" />
+    <link rel="prev" title="Adversarial Example Generation" href="fgsm_tutorial.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+  <!-- Preload the theme fonts -->
+
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
 <!-- Preload the katex fonts -->
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Math-Italic.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Regular.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Bold.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size1-Regular.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size4-Regular.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size2-Regular.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size3-Regular.woff2" rel="preload" type="font/woff2"/>
-<link as="font" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Caligraphic-Regular.woff2" rel="preload" type="font/woff2"/>
+
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Caligraphic-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 </head>
+
 <div class="container-fluid header-holder tutorials-header" id="header-holder">
-<div class="container">
-<div class="header-container">
-<a aria-label="PyTorch" class="header-logo" href="https://pytorch.org/"></a>
-<div class="main-menu">
-<ul>
-<li>
-<a href="https://pytorch.org/get-started">Get Started</a>
-</li>
-<li>
-<div class="ecosystem-dropdown">
-<a data-toggle="ecosystem-dropdown" id="dropdownMenuButton">
+  <div class="container">
+    <div class="header-container">
+      <a class="header-logo" href="https://pytorch.org/" aria-label="PyTorch"></a>
+
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://pytorch.org/get-started">Get Started</a>
+          </li>
+
+          <li>
+            <div class="ecosystem-dropdown">
+              <a id="dropdownMenuButton" data-toggle="ecosystem-dropdown">
                 Ecosystem
               </a>
-<div class="ecosystem-dropdown-menu">
-<a "="" class="nav-dropdown-item" href="https://pytorch.org/hub">
-<span class="dropdown-title">Models (Beta)</span>
-<p>Discover, publish, and reuse pre-trained models</p>
-</a>
-<a class="nav-dropdown-item" href="https://pytorch.org/ecosystem">
-<span class="dropdown-title">Tools &amp; Libraries</span>
-<p>Explore the ecosystem of tools and libraries</p>
-</a>
-</div>
-</div>
-</li>
-<li>
-<a href="https://pytorch.org/mobile">Mobile</a>
-</li>
-<li>
-<a href="https://pytorch.org/blog/">Blog</a>
-</li>
-<li class="active">
-<a href="https://pytorch.org/tutorials">Tutorials</a>
-</li>
-<li>
-<a href="https://pytorch.org/docs/stable/index.html">Docs</a>
-</li>
-<li>
-<div class="resources-dropdown">
-<a data-toggle="resources-dropdown" id="resourcesDropdownButton">
+              <div class="ecosystem-dropdown-menu">
+                <a class="nav-dropdown-item" href="https://pytorch.org/hub"">
+                  <span class=dropdown-title>Models (Beta)</span>
+                  <p>Discover, publish, and reuse pre-trained models</p>
+                </a>
+                <a class="nav-dropdown-item" href="https://pytorch.org/ecosystem">
+                  <span class=dropdown-title>Tools & Libraries</span>
+                  <p>Explore the ecosystem of tools and libraries</p>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/mobile">Mobile</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/blog/">Blog</a>
+          </li>
+
+          <li class="active">
+            <a href="https://pytorch.org/tutorials">Tutorials</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/docs/stable/index.html">Docs</a>
+          </li>
+
+          <li>
+            <div class="resources-dropdown">
+              <a id="resourcesDropdownButton" data-toggle="resources-dropdown">
                 Resources
               </a>
-<div class="resources-dropdown-menu">
-<a "="" class="nav-dropdown-item" href="https://pytorch.org/resources">
-<span class="dropdown-title">Developer Resources</span>
-<p>Find resources and get questions answered</p>
-</a>
-<a class="nav-dropdown-item" href="https://pytorch.org/features">
-<span class="dropdown-title">About</span>
-<p>Learn about PyTorch’s features and capabilities</p>
-</a>
+              <div class="resources-dropdown-menu">
+                <a class="nav-dropdown-item" href="https://pytorch.org/resources"">
+                  <span class=dropdown-title>Developer Resources</span>
+                  <p>Find resources and get questions answered</p>
+                </a>
+                <a class="nav-dropdown-item" href="https://pytorch.org/features">
+                  <span class=dropdown-title>About</span>
+                  <p>Learn about PyTorch’s features and capabilities</p>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="https://github.com/pytorch/pytorch">Github</a>
+          </li>
+        </ul>
+      </div>
+
+      <a class="main-menu-open-button" href="#" data-behavior="open-mobile-menu"></a>
+    </div>
+
+  </div>
 </div>
-</div>
-</li>
-<li>
-<a href="https://github.com/pytorch/pytorch">Github</a>
-</li>
-</ul>
-</div>
-<a class="main-menu-open-button" data-behavior="open-mobile-menu" href="#"></a>
-</div>
-</div>
-</div>
+
+
 <body class="pytorch-body">
-<div class="table-of-contents-link-wrapper">
-<span>Table of Contents</span>
-<a class="toggle-table-of-contents" data-behavior="toggle-table-of-contents" href="#"></a>
-</div>
-<nav class="pytorch-left-menu" data-toggle="wy-nav-shift" id="pytorch-left-menu">
-<div class="pytorch-side-scroll">
-<div aria-label="main navigation" class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation">
-<div class="pytorch-left-menu-search">
-<div class="version">
+
+   
+
+    
+
+    <div class="table-of-contents-link-wrapper">
+      <span>Table of Contents</span>
+      <a href="#" class="toggle-table-of-contents" data-behavior="toggle-table-of-contents"></a>
+    </div>
+
+    <nav data-toggle="wy-nav-shift" class="pytorch-left-menu" id="pytorch-left-menu">
+      <div class="pytorch-side-scroll">
+        <div class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          <div class="pytorch-left-menu-search">
+            
+
+            
+              
+              
+                <div class="version">
                   1.7.0
                 </div>
+              
+            
+
+            
+
+
+  
+
+
 <div role="search">
-<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
-<input name="q" placeholder="Search Tutorials" type="text"/>
-<input name="check_keywords" type="hidden" value="yes"/>
-<input name="area" type="hidden" value="default"/>
-</form>
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search Tutorials" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-</div>
-<p class="caption"><span class="caption-text">PyTorch Recipes</span></p>
+
+            
+          </div>
+
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">PyTorch Recipes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../recipes/recipes_index.html">See All Recipes</a></li>
 </ul>
@@ -191,56 +257,100 @@
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/rpc_async_execution.html">Implementing Batch RPC Processing Using Asynchronous Executions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/rpc_ddp_tutorial.html">Combining Distributed DataParallel with Distributed RPC Framework</a></li>
 </ul>
-</div>
-</div>
-</nav>
-<div class="pytorch-container">
-<div class="pytorch-page-level-bar" id="pytorch-page-level-bar">
-<div class="pytorch-breadcrumbs-wrapper">
-<div aria-label="breadcrumbs navigation" role="navigation">
-<ul class="pytorch-breadcrumbs">
-<li>
-<a href="../index.html">
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <div class="pytorch-container">
+      <div class="pytorch-page-level-bar" id="pytorch-page-level-bar">
+        <div class="pytorch-breadcrumbs-wrapper">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="pytorch-breadcrumbs">
+    
+      <li>
+        <a href="../index.html">
           
             Tutorials
           
         </a> &gt;
       </li>
-<li>DCGAN Tutorial</li>
-<li class="pytorch-breadcrumbs-aside">
-<a href="../_sources/beginner/dcgan_faces_tutorial.rst.txt" rel="nofollow"><img src="../_static/images/view-page-source-icon.svg"/></a>
-</li>
-</ul>
+
+        
+      <li>DCGAN Tutorial</li>
+    
+    
+      <li class="pytorch-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/beginner/dcgan_faces_tutorial.rst.txt" rel="nofollow"><img src="../_static/images/view-page-source-icon.svg"></a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
 </div>
-</div>
-<div class="pytorch-shortcuts-wrapper" id="pytorch-shortcuts-wrapper">
+        </div>
+
+        <div class="pytorch-shortcuts-wrapper" id="pytorch-shortcuts-wrapper">
           Shortcuts
         </div>
-</div>
-<section class="pytorch-content-wrap" data-toggle="wy-nav-shift" id="pytorch-content-wrap">
-<div class="pytorch-content-left">
-<div class="pytorch-call-to-action-links">
-<div id="tutorial-type">beginner/dcgan_faces_tutorial</div>
-<div id="google-colab-link">
-<img class="call-to-action-img" src="../_static/images/pytorch-colab.svg"/>
-<div class="call-to-action-desktop-view">Run in Google Colab</div>
-<div class="call-to-action-mobile-view">Colab</div>
-</div>
-<div id="download-notebook-link">
-<img class="call-to-action-notebook-img" src="../_static/images/pytorch-download.svg"/>
-<div class="call-to-action-desktop-view">Download Notebook</div>
-<div class="call-to-action-mobile-view">Notebook</div>
-</div>
-<div id="github-view-link">
-<img class="call-to-action-img" src="../_static/images/pytorch-github.svg"/>
-<div class="call-to-action-desktop-view">View on GitHub</div>
-<div class="call-to-action-mobile-view">GitHub</div>
-</div>
-</div>
-<div class="rst-content">
-<div class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
-<article class="pytorch-article" id="pytorch-article" itemprop="articleBody">
-<div class="sphx-glr-download-link-note admonition note">
+      </div>
+
+      <section data-toggle="wy-nav-shift" id="pytorch-content-wrap" class="pytorch-content-wrap">
+        <div class="pytorch-content-left">
+
+        
+
+          <div class="pytorch-call-to-action-links">
+            <div id="tutorial-type">beginner/dcgan_faces_tutorial</div>
+
+            <div id="google-colab-link">
+              <img class="call-to-action-img" src="../_static/images/pytorch-colab.svg"/>
+              <div class="call-to-action-desktop-view">Run in Google Colab</div>
+              <div class="call-to-action-mobile-view">Colab</div>
+            </div>
+            <div id="download-notebook-link">
+              <img class="call-to-action-notebook-img" src="../_static/images/pytorch-download.svg"/>
+              <div class="call-to-action-desktop-view">Download Notebook</div>
+              <div class="call-to-action-mobile-view">Notebook</div>
+            </div>
+            <div id="github-view-link">
+              <img class="call-to-action-img" src="../_static/images/pytorch-github.svg"/>
+              <div class="call-to-action-desktop-view">View on GitHub</div>
+              <div class="call-to-action-mobile-view">GitHub</div>
+            </div>
+          </div>
+
+        
+          
+          <div class="rst-content">
+          
+            <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
+             <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
+              
+  <div class="sphx-glr-download-link-note admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Click <a class="reference internal" href="#sphx-glr-download-beginner-dcgan-faces-tutorial-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
@@ -318,7 +428,7 @@ train to this point.</p>
 <p>A DCGAN is a direct extension of the GAN described above, except that it
 explicitly uses convolutional and convolutional-transpose layers in the
 discriminator and generator, respectively. It was first described by
-Radford et. al. in the paper <a class="reference external" href="https://arxiv.org/pdf/1511.06434.pdf">Unsupervised Representation Learning With
+Radford et. al.&nbsp;in the paper <a class="reference external" href="https://arxiv.org/pdf/1511.06434.pdf">Unsupervised Representation Learning With
 Deep Convolutional Generative Adversarial
 Networks</a>. The discriminator
 is made up of strided
@@ -340,7 +450,7 @@ volume with the same shape as an image. In the paper, the authors also
 give some tips about how to setup the optimizers, how to calculate the
 loss functions, and how to initialize the model weights, all of which
 will be explained in the coming sections.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="c1">#%matplotlib inline</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -357,18 +467,14 @@ will be explained in the coming sections.</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span>
 
 <span class="c1"># Set random seed for reproducibility</span>
 <span class="n">manualSeed</span> <span class="o">=</span> <span class="mi">999</span>
 <span class="c1">#manualSeed = random.randint(1, 10000) # use if you want new results</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Random Seed: "</span><span class="p">,</span> <span class="n">manualSeed</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Random Seed: &quot;</span><span class="p">,</span> <span class="n">manualSeed</span><span class="p">)</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">manualSeed</span><span class="p">)</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">manualSeed</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Random Seed:  999
 </pre></div>
 </div>
 </div>
@@ -407,7 +513,7 @@ CPU mode. If this number is greater than 0 it will run on that number
 of GPUs</li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Root directory for dataset</span>
-<span class="n">dataroot</span> <span class="o">=</span> <span class="s2">"data/celeba"</span>
+<span class="n">dataroot</span> <span class="o">=</span> <span class="s2">&quot;data/celeba&quot;</span>
 
 <span class="c1"># Number of workers for dataloader</span>
 <span class="n">workers</span> <span class="o">=</span> <span class="mi">2</span>
@@ -484,17 +590,16 @@ training data.</p>
                                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
 
 <span class="c1"># Decide which device we want to run on</span>
-<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda:0"</span> <span class="k">if</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 
 <span class="c1"># Plot some training images</span>
 <span class="n">real_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">dataloader</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Training Images"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Training Images&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">vutils</span><span class="o">.</span><span class="n">make_grid</span><span class="p">(</span><span class="n">real_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)[:</span><span class="mi">64</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_dcgan_faces_tutorial_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_dcgan_faces_tutorial_001.png"/>
 </div>
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
@@ -513,9 +618,9 @@ applied to the models immediately after initialization.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># custom weights initialization called on netG and netD</span>
 <span class="k">def</span> <span class="nf">weights_init</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="k">if</span> <span class="n">classname</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'Conv'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">classname</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Conv&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">classname</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'BatchNorm'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">classname</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;BatchNorm&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
         <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -526,7 +631,7 @@ applied to the models immediately after initialization.</p>
 <p>The generator, <span class="math notranslate nohighlight">\(G\)</span>, is designed to map the latent space vector
 (<span class="math notranslate nohighlight">\(z\)</span>) to data-space. Since our data are images, converting
 <span class="math notranslate nohighlight">\(z\)</span> to data-space means ultimately creating a RGB image with the
-same size as the training images (i.e. 3x64x64). In practice, this is
+same size as the training images (i.e.&nbsp;3x64x64). In practice, this is
 accomplished through a series of strided two dimensional convolutional
 transpose layers, each paired with a 2d batch norm layer and a relu
 activation. The output of the generator is fed through a tanh function
@@ -536,7 +641,7 @@ conv-transpose layers, as this is a critical contribution of the DCGAN
 paper. These layers help with the flow of gradients during training. An
 image of the generator from the DCGAN paper is shown below.</p>
 <div class="figure">
-<img alt="dcgan_generator" src="../_images/dcgan_generator.png"/>
+<img alt="dcgan_generator" src="../_images/dcgan_generator.png" />
 </div>
 <p>Notice, the how the inputs we set in the input section (<em>nz</em>, <em>ngf</em>, and
 <em>nc</em>) influence the generator architecture in code. <em>nz</em> is the length
@@ -547,7 +652,7 @@ code for the generator.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generator Code</span>
 
 <span class="k">class</span> <span class="nc">Generator</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngpu</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngpu</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Generator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngpu</span> <span class="o">=</span> <span class="n">ngpu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
@@ -584,7 +689,7 @@ structured.</p>
 <span class="n">netG</span> <span class="o">=</span> <span class="n">Generator</span><span class="p">(</span><span class="n">ngpu</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Handle multi-gpu if desired</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">'cuda'</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
     <span class="n">netG</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">netG</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">ngpu</span><span class="p">)))</span>
 
 <span class="c1"># Apply the weights_init function to randomly initialize all weights</span>
@@ -593,27 +698,6 @@ structured.</p>
 
 <span class="c1"># Print the model</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">netG</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Generator(
-  (main): Sequential(
-    (0): ConvTranspose2d(100, 512, kernel_size=(4, 4), stride=(1, 1), bias=False)
-    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (2): ReLU(inplace=True)
-    (3): ConvTranspose2d(512, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (5): ReLU(inplace=True)
-    (6): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (7): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (8): ReLU(inplace=True)
-    (9): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (10): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (11): ReLU(inplace=True)
-    (12): ConvTranspose2d(64, 3, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (13): Tanh()
-  )
-)
 </pre></div>
 </div>
 </div>
@@ -634,7 +718,7 @@ healthy gradient flow which is critical for the learning process of both
 <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(D\)</span>.</p>
 <p>Discriminator Code</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Discriminator</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngpu</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngpu</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Discriminator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngpu</span> <span class="o">=</span> <span class="n">ngpu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
@@ -668,7 +752,7 @@ healthy gradient flow which is critical for the learning process of both
 <span class="n">netD</span> <span class="o">=</span> <span class="n">Discriminator</span><span class="p">(</span><span class="n">ngpu</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
 <span class="c1"># Handle multi-gpu if desired</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">'cuda'</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ngpu</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
     <span class="n">netD</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">netD</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">ngpu</span><span class="p">)))</span>
 
 <span class="c1"># Apply the weights_init function to randomly initialize all weights</span>
@@ -677,26 +761,6 @@ healthy gradient flow which is critical for the learning process of both
 
 <span class="c1"># Print the model</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">netD</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Discriminator(
-  (main): Sequential(
-    (0): Conv2d(3, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): LeakyReLU(negative_slope=0.2, inplace=True)
-    (2): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (3): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (4): LeakyReLU(negative_slope=0.2, inplace=True)
-    (5): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (6): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (7): LeakyReLU(negative_slope=0.2, inplace=True)
-    (8): Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (9): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    (10): LeakyReLU(negative_slope=0.2, inplace=True)
-    (11): Conv2d(512, 1, kernel_size=(4, 4), stride=(1, 1), bias=False)
-    (12): Sigmoid()
-  )
-)
 </pre></div>
 </div>
 </div>
@@ -715,7 +779,7 @@ in the objective function (i.e. <span class="math notranslate nohighlight">\(log
 use with the <span class="math notranslate nohighlight">\(y\)</span> input. This is accomplished in the training loop
 which is coming up soon, but it is important to understand how we can
 choose which component we wish to calculate just by changing <span class="math notranslate nohighlight">\(y\)</span>
-(i.e. GT labels).</p>
+(i.e.&nbsp;GT labels).</p>
 <p>Next, we define our real label as 1 and the fake label as 0. These
 labels will be used when calculating the losses of <span class="math notranslate nohighlight">\(D\)</span> and
 <span class="math notranslate nohighlight">\(G\)</span>, and this is also the convention used in the original GAN
@@ -724,7 +788,7 @@ one for <span class="math notranslate nohighlight">\(G\)</span>. As specified in
 optimizers with learning rate 0.0002 and Beta1 = 0.5. For keeping track
 of the generator’s learning progression, we will generate a fixed batch
 of latent vectors that are drawn from a Gaussian distribution
-(i.e. fixed_noise) . In the training loop, we will periodically input
+(i.e.&nbsp;fixed_noise) . In the training loop, we will periodically input
 this fixed_noise into <span class="math notranslate nohighlight">\(G\)</span>, and over the iterations we will see
 images form out of the noise.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize BCELoss function</span>
@@ -811,7 +875,7 @@ run and if you removed some data from the dataset.</p>
 <span class="n">D_losses</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">iters</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Starting Training Loop..."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting Training Loop...&quot;</span><span class="p">)</span>
 <span class="c1"># For each epoch</span>
 <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
     <span class="c1"># For each batch in the dataloader</span>
@@ -842,7 +906,7 @@ run and if you removed some data from the dataset.</p>
         <span class="n">label</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">fake_label</span><span class="p">)</span>
         <span class="c1"># Classify all fake batch with D</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">fake</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Calculate D's loss on the all-fake batch</span>
+        <span class="c1"># Calculate D&#39;s loss on the all-fake batch</span>
         <span class="n">errD_fake</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="c1"># Calculate the gradients for this batch</span>
         <span class="n">errD_fake</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
@@ -859,7 +923,7 @@ run and if you removed some data from the dataset.</p>
         <span class="n">label</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">real_label</span><span class="p">)</span>  <span class="c1"># fake labels are real for generator cost</span>
         <span class="c1"># Since we just updated D, perform another forward pass of all-fake batch through D</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">fake</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Calculate G's loss based on this output</span>
+        <span class="c1"># Calculate G&#39;s loss based on this output</span>
         <span class="n">errG</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="c1"># Calculate gradients for G</span>
         <span class="n">errG</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
@@ -869,7 +933,7 @@ run and if you removed some data from the dataset.</p>
 
         <span class="c1"># Output training stats</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'[</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">][</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">]</span><span class="se">\t</span><span class="s1">Loss_D: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">Loss_G: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">D(x): </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">D(G(z)): </span><span class="si">%.4f</span><span class="s1"> / </span><span class="si">%.4f</span><span class="s1">'</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">][</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">]</span><span class="se">\t</span><span class="s1">Loss_D: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">Loss_G: </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">D(x): </span><span class="si">%.4f</span><span class="se">\t</span><span class="s1">D(G(z)): </span><span class="si">%.4f</span><span class="s1"> / </span><span class="si">%.4f</span><span class="s1">&#39;</span>
                   <span class="o">%</span> <span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">),</span>
                      <span class="n">errD</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">errG</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">D_x</span><span class="p">,</span> <span class="n">D_G_z1</span><span class="p">,</span> <span class="n">D_G_z2</span><span class="p">))</span>
 
@@ -877,177 +941,13 @@ run and if you removed some data from the dataset.</p>
         <span class="n">G_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">errG</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
         <span class="n">D_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">errD</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 
-        <span class="c1"># Check how the generator is doing by saving G's output on fixed_noise</span>
+        <span class="c1"># Check how the generator is doing by saving G&#39;s output on fixed_noise</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">iters</span> <span class="o">%</span> <span class="mi">500</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">((</span><span class="n">epoch</span> <span class="o">==</span> <span class="n">num_epochs</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
             <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
                 <span class="n">fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">fixed_noise</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
             <span class="n">img_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vutils</span><span class="o">.</span><span class="n">make_grid</span><span class="p">(</span><span class="n">fake</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
         <span class="n">iters</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Starting Training Loop...
-[0/5][0/1583]   Loss_D: 1.9847  Loss_G: 5.5914  D(x): 0.6004    D(G(z)): 0.6680 / 0.0062
-[0/5][50/1583]  Loss_D: 0.8639  Loss_G: 18.1977 D(x): 0.9117    D(G(z)): 0.4232 / 0.0000
-[0/5][100/1583] Loss_D: 0.3898  Loss_G: 8.1070  D(x): 0.8385    D(G(z)): 0.0105 / 0.0201
-[0/5][150/1583] Loss_D: 0.8830  Loss_G: 3.2149  D(x): 0.5983    D(G(z)): 0.0084 / 0.0609
-[0/5][200/1583] Loss_D: 1.3662  Loss_G: 2.0088  D(x): 0.3762    D(G(z)): 0.0175 / 0.1770
-[0/5][250/1583] Loss_D: 0.2958  Loss_G: 4.6343  D(x): 0.8309    D(G(z)): 0.0699 / 0.0145
-[0/5][300/1583] Loss_D: 1.0681  Loss_G: 1.4432  D(x): 0.5369    D(G(z)): 0.0592 / 0.3276
-[0/5][350/1583] Loss_D: 1.5408  Loss_G: 13.1054 D(x): 0.9520    D(G(z)): 0.7024 / 0.0000
-[0/5][400/1583] Loss_D: 0.5754  Loss_G: 5.7786  D(x): 0.8835    D(G(z)): 0.3045 / 0.0057
-[0/5][450/1583] Loss_D: 0.3635  Loss_G: 4.1962  D(x): 0.8195    D(G(z)): 0.0993 / 0.0304
-[0/5][500/1583] Loss_D: 2.8085  Loss_G: 7.4031  D(x): 0.1624    D(G(z)): 0.0003 / 0.0021
-[0/5][550/1583] Loss_D: 0.4597  Loss_G: 4.2258  D(x): 0.8202    D(G(z)): 0.1648 / 0.0261
-[0/5][600/1583] Loss_D: 0.8003  Loss_G: 2.1248  D(x): 0.6025    D(G(z)): 0.0884 / 0.1799
-[0/5][650/1583] Loss_D: 0.6352  Loss_G: 6.6132  D(x): 0.8745    D(G(z)): 0.3244 / 0.0030
-[0/5][700/1583] Loss_D: 0.4881  Loss_G: 3.7922  D(x): 0.7940    D(G(z)): 0.1583 / 0.0404
-[0/5][750/1583] Loss_D: 0.7569  Loss_G: 8.4424  D(x): 0.9580    D(G(z)): 0.4395 / 0.0006
-[0/5][800/1583] Loss_D: 0.6303  Loss_G: 3.5249  D(x): 0.6646    D(G(z)): 0.0377 / 0.0475
-[0/5][850/1583] Loss_D: 0.4562  Loss_G: 4.3103  D(x): 0.7909    D(G(z)): 0.0896 / 0.0295
-[0/5][900/1583] Loss_D: 0.2926  Loss_G: 4.8268  D(x): 0.8654    D(G(z)): 0.0904 / 0.0154
-[0/5][950/1583] Loss_D: 0.6873  Loss_G: 3.2930  D(x): 0.7710    D(G(z)): 0.2425 / 0.0679
-[0/5][1000/1583]        Loss_D: 0.4474  Loss_G: 5.1154  D(x): 0.9014    D(G(z)): 0.2413 / 0.0118
-[0/5][1050/1583]        Loss_D: 0.5227  Loss_G: 4.5631  D(x): 0.8877    D(G(z)): 0.2882 / 0.0197
-[0/5][1100/1583]        Loss_D: 0.3265  Loss_G: 4.9723  D(x): 0.9253    D(G(z)): 0.1932 / 0.0118
-[0/5][1150/1583]        Loss_D: 2.0190  Loss_G: 1.2913  D(x): 0.2878    D(G(z)): 0.0023 / 0.4268
-[0/5][1200/1583]        Loss_D: 0.6745  Loss_G: 6.8166  D(x): 0.9661    D(G(z)): 0.4054 / 0.0023
-[0/5][1250/1583]        Loss_D: 1.2208  Loss_G: 1.9484  D(x): 0.4430    D(G(z)): 0.0224 / 0.2334
-[0/5][1300/1583]        Loss_D: 0.5775  Loss_G: 4.3202  D(x): 0.8747    D(G(z)): 0.3096 / 0.0226
-[0/5][1350/1583]        Loss_D: 0.8330  Loss_G: 2.9315  D(x): 0.5854    D(G(z)): 0.0568 / 0.1013
-[0/5][1400/1583]        Loss_D: 0.5434  Loss_G: 3.0217  D(x): 0.7409    D(G(z)): 0.0954 / 0.0920
-[0/5][1450/1583]        Loss_D: 0.6279  Loss_G: 4.6093  D(x): 0.8753    D(G(z)): 0.3230 / 0.0181
-[0/5][1500/1583]        Loss_D: 0.6349  Loss_G: 5.5203  D(x): 0.8925    D(G(z)): 0.3520 / 0.0070
-[0/5][1550/1583]        Loss_D: 0.6359  Loss_G: 2.4367  D(x): 0.6886    D(G(z)): 0.1011 / 0.1323
-[1/5][0/1583]   Loss_D: 1.3747  Loss_G: 6.5409  D(x): 0.9228    D(G(z)): 0.6213 / 0.0031
-[1/5][50/1583]  Loss_D: 0.5187  Loss_G: 3.4158  D(x): 0.7804    D(G(z)): 0.1849 / 0.0521
-[1/5][100/1583] Loss_D: 0.7891  Loss_G: 2.4292  D(x): 0.5906    D(G(z)): 0.0587 / 0.1336
-[1/5][150/1583] Loss_D: 1.3016  Loss_G: 4.7790  D(x): 0.9652    D(G(z)): 0.6502 / 0.0165
-[1/5][200/1583] Loss_D: 0.5326  Loss_G: 5.6546  D(x): 0.9475    D(G(z)): 0.3178 / 0.0079
-[1/5][250/1583] Loss_D: 0.3686  Loss_G: 4.9421  D(x): 0.9490    D(G(z)): 0.2401 / 0.0126
-[1/5][300/1583] Loss_D: 0.4391  Loss_G: 4.0600  D(x): 0.7358    D(G(z)): 0.0468 / 0.0358
-[1/5][350/1583] Loss_D: 0.3938  Loss_G: 3.4079  D(x): 0.7357    D(G(z)): 0.0399 / 0.0608
-[1/5][400/1583] Loss_D: 0.2983  Loss_G: 3.9345  D(x): 0.8159    D(G(z)): 0.0636 / 0.0343
-[1/5][450/1583] Loss_D: 0.4736  Loss_G: 3.5611  D(x): 0.8428    D(G(z)): 0.2090 / 0.0458
-[1/5][500/1583] Loss_D: 0.3561  Loss_G: 3.9697  D(x): 0.8716    D(G(z)): 0.1683 / 0.0330
-[1/5][550/1583] Loss_D: 0.5811  Loss_G: 3.2186  D(x): 0.7847    D(G(z)): 0.2281 / 0.0569
-[1/5][600/1583] Loss_D: 0.6484  Loss_G: 3.7935  D(x): 0.9226    D(G(z)): 0.3621 / 0.0430
-[1/5][650/1583] Loss_D: 0.4046  Loss_G: 3.5188  D(x): 0.7718    D(G(z)): 0.0785 / 0.0466
-[1/5][700/1583] Loss_D: 0.3828  Loss_G: 3.7686  D(x): 0.8456    D(G(z)): 0.1629 / 0.0356
-[1/5][750/1583] Loss_D: 0.3429  Loss_G: 3.2871  D(x): 0.8415    D(G(z)): 0.1288 / 0.0537
-[1/5][800/1583] Loss_D: 0.5969  Loss_G: 2.2276  D(x): 0.6804    D(G(z)): 0.1041 / 0.1480
-[1/5][850/1583] Loss_D: 0.3159  Loss_G: 3.0982  D(x): 0.8953    D(G(z)): 0.1433 / 0.0642
-[1/5][900/1583] Loss_D: 0.3874  Loss_G: 3.3302  D(x): 0.7464    D(G(z)): 0.0371 / 0.0647
-[1/5][950/1583] Loss_D: 0.4948  Loss_G: 2.8816  D(x): 0.7916    D(G(z)): 0.1907 / 0.0789
-[1/5][1000/1583]        Loss_D: 1.6573  Loss_G: 7.0127  D(x): 0.9424    D(G(z)): 0.7226 / 0.0025
-[1/5][1050/1583]        Loss_D: 1.5499  Loss_G: 6.3525  D(x): 0.9806    D(G(z)): 0.6892 / 0.0038
-[1/5][1100/1583]        Loss_D: 1.0950  Loss_G: 1.0653  D(x): 0.4223    D(G(z)): 0.0170 / 0.4037
-[1/5][1150/1583]        Loss_D: 0.7018  Loss_G: 1.5005  D(x): 0.5891    D(G(z)): 0.0653 / 0.2937
-[1/5][1200/1583]        Loss_D: 0.7964  Loss_G: 2.3087  D(x): 0.5436    D(G(z)): 0.0342 / 0.1628
-[1/5][1250/1583]        Loss_D: 0.3789  Loss_G: 2.5291  D(x): 0.7784    D(G(z)): 0.0832 / 0.1070
-[1/5][1300/1583]        Loss_D: 0.5403  Loss_G: 4.1908  D(x): 0.9158    D(G(z)): 0.3228 / 0.0231
-[1/5][1350/1583]        Loss_D: 0.8332  Loss_G: 4.4792  D(x): 0.8852    D(G(z)): 0.4410 / 0.0216
-[1/5][1400/1583]        Loss_D: 0.5750  Loss_G: 1.1900  D(x): 0.6653    D(G(z)): 0.1016 / 0.3560
-[1/5][1450/1583]        Loss_D: 0.3690  Loss_G: 3.2486  D(x): 0.9025    D(G(z)): 0.2074 / 0.0562
-[1/5][1500/1583]        Loss_D: 0.5008  Loss_G: 3.5441  D(x): 0.7854    D(G(z)): 0.1774 / 0.0504
-[1/5][1550/1583]        Loss_D: 0.5255  Loss_G: 3.0203  D(x): 0.8022    D(G(z)): 0.2163 / 0.0665
-[2/5][0/1583]   Loss_D: 0.6246  Loss_G: 1.5438  D(x): 0.6513    D(G(z)): 0.1097 / 0.2620
-[2/5][50/1583]  Loss_D: 0.7007  Loss_G: 3.7359  D(x): 0.8557    D(G(z)): 0.3665 / 0.0420
-[2/5][100/1583] Loss_D: 0.5291  Loss_G: 2.6325  D(x): 0.7657    D(G(z)): 0.1902 / 0.0924
-[2/5][150/1583] Loss_D: 0.7171  Loss_G: 0.9914  D(x): 0.5709    D(G(z)): 0.0644 / 0.4255
-[2/5][200/1583] Loss_D: 0.4215  Loss_G: 2.7369  D(x): 0.7943    D(G(z)): 0.1434 / 0.0917
-[2/5][250/1583] Loss_D: 0.6373  Loss_G: 1.9164  D(x): 0.6503    D(G(z)): 0.1253 / 0.1988
-[2/5][300/1583] Loss_D: 1.6510  Loss_G: 4.5788  D(x): 0.9329    D(G(z)): 0.7047 / 0.0215
-[2/5][350/1583] Loss_D: 0.9727  Loss_G: 1.0070  D(x): 0.4843    D(G(z)): 0.0626 / 0.4357
-[2/5][400/1583] Loss_D: 0.9099  Loss_G: 1.2678  D(x): 0.4658    D(G(z)): 0.0400 / 0.3297
-[2/5][450/1583] Loss_D: 0.5204  Loss_G: 3.4156  D(x): 0.8245    D(G(z)): 0.2391 / 0.0455
-[2/5][500/1583] Loss_D: 0.7719  Loss_G: 1.5160  D(x): 0.6031    D(G(z)): 0.1349 / 0.2815
-[2/5][550/1583] Loss_D: 0.4769  Loss_G: 3.0318  D(x): 0.8767    D(G(z)): 0.2689 / 0.0603
-[2/5][600/1583] Loss_D: 0.9630  Loss_G: 2.9630  D(x): 0.8806    D(G(z)): 0.5169 / 0.0704
-[2/5][650/1583] Loss_D: 0.7524  Loss_G: 3.8040  D(x): 0.9096    D(G(z)): 0.4440 / 0.0316
-[2/5][700/1583] Loss_D: 0.6330  Loss_G: 3.0841  D(x): 0.8305    D(G(z)): 0.3139 / 0.0663
-[2/5][750/1583] Loss_D: 1.0584  Loss_G: 4.6413  D(x): 0.9131    D(G(z)): 0.5577 / 0.0151
-[2/5][800/1583] Loss_D: 1.1463  Loss_G: 4.8062  D(x): 0.8807    D(G(z)): 0.5852 / 0.0130
-[2/5][850/1583] Loss_D: 0.6894  Loss_G: 2.0617  D(x): 0.6023    D(G(z)): 0.0835 / 0.1632
-[2/5][900/1583] Loss_D: 0.7954  Loss_G: 4.0780  D(x): 0.8979    D(G(z)): 0.4428 / 0.0265
-[2/5][950/1583] Loss_D: 1.2267  Loss_G: 5.2114  D(x): 0.9713    D(G(z)): 0.6521 / 0.0102
-[2/5][1000/1583]        Loss_D: 0.6578  Loss_G: 1.7314  D(x): 0.7238    D(G(z)): 0.2322 / 0.2136
-[2/5][1050/1583]        Loss_D: 0.5279  Loss_G: 2.1952  D(x): 0.7198    D(G(z)): 0.1381 / 0.1408
-[2/5][1100/1583]        Loss_D: 0.5837  Loss_G: 3.3049  D(x): 0.8680    D(G(z)): 0.3201 / 0.0511
-[2/5][1150/1583]        Loss_D: 1.3370  Loss_G: 3.8457  D(x): 0.9652    D(G(z)): 0.6542 / 0.0360
-[2/5][1200/1583]        Loss_D: 1.1006  Loss_G: 1.2620  D(x): 0.4200    D(G(z)): 0.0513 / 0.3563
-[2/5][1250/1583]        Loss_D: 1.3391  Loss_G: 3.8638  D(x): 0.9374    D(G(z)): 0.6683 / 0.0331
-[2/5][1300/1583]        Loss_D: 1.2493  Loss_G: 0.8268  D(x): 0.4237    D(G(z)): 0.1461 / 0.5189
-[2/5][1350/1583]        Loss_D: 0.7125  Loss_G: 3.8578  D(x): 0.8993    D(G(z)): 0.4162 / 0.0295
-[2/5][1400/1583]        Loss_D: 0.6328  Loss_G: 1.6893  D(x): 0.6077    D(G(z)): 0.0702 / 0.2326
-[2/5][1450/1583]        Loss_D: 0.8608  Loss_G: 1.6100  D(x): 0.5277    D(G(z)): 0.1139 / 0.2513
-[2/5][1500/1583]        Loss_D: 1.0621  Loss_G: 4.1253  D(x): 0.9309    D(G(z)): 0.5720 / 0.0223
-[2/5][1550/1583]        Loss_D: 0.5007  Loss_G: 2.5393  D(x): 0.6915    D(G(z)): 0.0761 / 0.1131
-[3/5][0/1583]   Loss_D: 0.7389  Loss_G: 3.7663  D(x): 0.9317    D(G(z)): 0.4417 / 0.0355
-[3/5][50/1583]  Loss_D: 0.7361  Loss_G: 3.7659  D(x): 0.8848    D(G(z)): 0.4145 / 0.0305
-[3/5][100/1583] Loss_D: 0.8395  Loss_G: 3.9335  D(x): 0.9069    D(G(z)): 0.4803 / 0.0289
-[3/5][150/1583] Loss_D: 0.9057  Loss_G: 5.0994  D(x): 0.9370    D(G(z)): 0.5231 / 0.0111
-[3/5][200/1583] Loss_D: 1.6818  Loss_G: 1.1360  D(x): 0.2698    D(G(z)): 0.0192 / 0.3998
-[3/5][250/1583] Loss_D: 0.6347  Loss_G: 2.8647  D(x): 0.8079    D(G(z)): 0.3038 / 0.0804
-[3/5][300/1583] Loss_D: 0.5467  Loss_G: 1.9148  D(x): 0.7004    D(G(z)): 0.1313 / 0.1866
-[3/5][350/1583] Loss_D: 0.6186  Loss_G: 3.2719  D(x): 0.8263    D(G(z)): 0.3034 / 0.0541
-[3/5][400/1583] Loss_D: 0.5005  Loss_G: 2.5467  D(x): 0.7330    D(G(z)): 0.1419 / 0.1036
-[3/5][450/1583] Loss_D: 0.7496  Loss_G: 1.6297  D(x): 0.5600    D(G(z)): 0.0810 / 0.2486
-[3/5][500/1583] Loss_D: 0.5415  Loss_G: 2.4763  D(x): 0.8153    D(G(z)): 0.2561 / 0.1036
-[3/5][550/1583] Loss_D: 1.0270  Loss_G: 1.4453  D(x): 0.5620    D(G(z)): 0.2534 / 0.2833
-[3/5][600/1583] Loss_D: 0.5924  Loss_G: 1.8752  D(x): 0.6868    D(G(z)): 0.1529 / 0.1875
-[3/5][650/1583] Loss_D: 0.6178  Loss_G: 1.6087  D(x): 0.6894    D(G(z)): 0.1667 / 0.2412
-[3/5][700/1583] Loss_D: 1.3337  Loss_G: 4.8565  D(x): 0.9150    D(G(z)): 0.6487 / 0.0130
-[3/5][750/1583] Loss_D: 0.7398  Loss_G: 4.2561  D(x): 0.9289    D(G(z)): 0.4493 / 0.0203
-[3/5][800/1583] Loss_D: 0.6002  Loss_G: 2.2077  D(x): 0.7703    D(G(z)): 0.2510 / 0.1381
-[3/5][850/1583] Loss_D: 0.6668  Loss_G: 1.3685  D(x): 0.6190    D(G(z)): 0.0946 / 0.3063
-[3/5][900/1583] Loss_D: 0.4958  Loss_G: 2.3789  D(x): 0.6959    D(G(z)): 0.0896 / 0.1314
-[3/5][950/1583] Loss_D: 1.6545  Loss_G: 1.2320  D(x): 0.2758    D(G(z)): 0.0724 / 0.3764
-[3/5][1000/1583]        Loss_D: 0.9446  Loss_G: 3.8936  D(x): 0.9184    D(G(z)): 0.5277 / 0.0265
-[3/5][1050/1583]        Loss_D: 1.0064  Loss_G: 3.9526  D(x): 0.8361    D(G(z)): 0.5170 / 0.0369
-[3/5][1100/1583]        Loss_D: 1.1717  Loss_G: 4.6119  D(x): 0.9389    D(G(z)): 0.6207 / 0.0145
-[3/5][1150/1583]        Loss_D: 0.7044  Loss_G: 2.3951  D(x): 0.7323    D(G(z)): 0.2748 / 0.1208
-[3/5][1200/1583]        Loss_D: 0.8643  Loss_G: 3.6983  D(x): 0.8677    D(G(z)): 0.4656 / 0.0339
-[3/5][1250/1583]        Loss_D: 0.6291  Loss_G: 1.2594  D(x): 0.6646    D(G(z)): 0.1502 / 0.3324
-[3/5][1300/1583]        Loss_D: 0.6079  Loss_G: 2.2850  D(x): 0.6306    D(G(z)): 0.0764 / 0.1306
-[3/5][1350/1583]        Loss_D: 0.4747  Loss_G: 2.2432  D(x): 0.7870    D(G(z)): 0.1774 / 0.1400
-[3/5][1400/1583]        Loss_D: 0.7127  Loss_G: 2.6705  D(x): 0.7322    D(G(z)): 0.2866 / 0.0959
-[3/5][1450/1583]        Loss_D: 0.7378  Loss_G: 1.6204  D(x): 0.6221    D(G(z)): 0.1602 / 0.2352
-[3/5][1500/1583]        Loss_D: 0.6805  Loss_G: 2.6543  D(x): 0.7825    D(G(z)): 0.3100 / 0.0949
-[3/5][1550/1583]        Loss_D: 0.5554  Loss_G: 2.2497  D(x): 0.7045    D(G(z)): 0.1483 / 0.1359
-[4/5][0/1583]   Loss_D: 0.6762  Loss_G: 2.3307  D(x): 0.8219    D(G(z)): 0.3444 / 0.1209
-[4/5][50/1583]  Loss_D: 0.6012  Loss_G: 2.4233  D(x): 0.7095    D(G(z)): 0.1891 / 0.1234
-[4/5][100/1583] Loss_D: 0.4908  Loss_G: 2.0864  D(x): 0.7205    D(G(z)): 0.1117 / 0.1572
-[4/5][150/1583] Loss_D: 0.8198  Loss_G: 4.0416  D(x): 0.8430    D(G(z)): 0.4247 / 0.0272
-[4/5][200/1583] Loss_D: 0.6902  Loss_G: 2.7898  D(x): 0.7555    D(G(z)): 0.2982 / 0.0799
-[4/5][250/1583] Loss_D: 0.9696  Loss_G: 1.9208  D(x): 0.4559    D(G(z)): 0.0411 / 0.2028
-[4/5][300/1583] Loss_D: 1.0947  Loss_G: 4.4635  D(x): 0.8949    D(G(z)): 0.5628 / 0.0175
-[4/5][350/1583] Loss_D: 0.5482  Loss_G: 2.7329  D(x): 0.7936    D(G(z)): 0.2371 / 0.0839
-[4/5][400/1583] Loss_D: 1.3615  Loss_G: 5.5092  D(x): 0.9303    D(G(z)): 0.6834 / 0.0060
-[4/5][450/1583] Loss_D: 0.6625  Loss_G: 1.6850  D(x): 0.6717    D(G(z)): 0.1845 / 0.2199
-[4/5][500/1583] Loss_D: 0.6969  Loss_G: 3.9459  D(x): 0.8863    D(G(z)): 0.4006 / 0.0248
-[4/5][550/1583] Loss_D: 0.4673  Loss_G: 2.7287  D(x): 0.7979    D(G(z)): 0.1833 / 0.0865
-[4/5][600/1583] Loss_D: 0.6350  Loss_G: 2.0407  D(x): 0.7235    D(G(z)): 0.2200 / 0.1790
-[4/5][650/1583] Loss_D: 0.5745  Loss_G: 2.1268  D(x): 0.7324    D(G(z)): 0.1870 / 0.1507
-[4/5][700/1583] Loss_D: 0.5850  Loss_G: 2.4498  D(x): 0.7536    D(G(z)): 0.2241 / 0.1112
-[4/5][750/1583] Loss_D: 0.5308  Loss_G: 2.6729  D(x): 0.8249    D(G(z)): 0.2581 / 0.0858
-[4/5][800/1583] Loss_D: 0.5553  Loss_G: 2.1394  D(x): 0.7571    D(G(z)): 0.2094 / 0.1457
-[4/5][850/1583] Loss_D: 0.5873  Loss_G: 1.6425  D(x): 0.6714    D(G(z)): 0.1223 / 0.2363
-[4/5][900/1583] Loss_D: 0.6673  Loss_G: 2.1069  D(x): 0.6494    D(G(z)): 0.1553 / 0.1587
-[4/5][950/1583] Loss_D: 0.5987  Loss_G: 1.9453  D(x): 0.6493    D(G(z)): 0.0833 / 0.1781
-[4/5][1000/1583]        Loss_D: 1.0392  Loss_G: 3.1166  D(x): 0.8597    D(G(z)): 0.5166 / 0.0650
-[4/5][1050/1583]        Loss_D: 0.5178  Loss_G: 1.8653  D(x): 0.7228    D(G(z)): 0.1370 / 0.1977
-[4/5][1100/1583]        Loss_D: 0.5831  Loss_G: 3.1818  D(x): 0.8104    D(G(z)): 0.2762 / 0.0547
-[4/5][1150/1583]        Loss_D: 1.2313  Loss_G: 0.5121  D(x): 0.3851    D(G(z)): 0.0530 / 0.6403
-[4/5][1200/1583]        Loss_D: 0.5152  Loss_G: 2.5895  D(x): 0.8097    D(G(z)): 0.2372 / 0.0923
-[4/5][1250/1583]        Loss_D: 0.7476  Loss_G: 4.3407  D(x): 0.9244    D(G(z)): 0.4451 / 0.0185
-[4/5][1300/1583]        Loss_D: 0.5440  Loss_G: 2.2089  D(x): 0.6751    D(G(z)): 0.0882 / 0.1476
-[4/5][1350/1583]        Loss_D: 0.6189  Loss_G: 4.0647  D(x): 0.9326    D(G(z)): 0.3872 / 0.0238
-[4/5][1400/1583]        Loss_D: 0.5347  Loss_G: 3.5654  D(x): 0.9122    D(G(z)): 0.3203 / 0.0389
-[4/5][1450/1583]        Loss_D: 0.5358  Loss_G: 2.5327  D(x): 0.8204    D(G(z)): 0.2511 / 0.1035
-[4/5][1500/1583]        Loss_D: 0.5355  Loss_G: 1.7248  D(x): 0.6767    D(G(z)): 0.0872 / 0.2329
-[4/5][1550/1583]        Loss_D: 0.5651  Loss_G: 2.3393  D(x): 0.6977    D(G(z)): 0.1304 / 0.1316
 </pre></div>
 </div>
 </div>
@@ -1062,16 +962,15 @@ next to a batch of fake data from G.</p>
 <p><strong>Loss versus training iteration</strong></p>
 <p>Below is a plot of D &amp; G’s losses versus training iterations.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Generator and Discriminator Loss During Training"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">G_losses</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">"G"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">D_losses</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">"D"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"iterations"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Loss"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Generator and Discriminator Loss During Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">G_losses</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;G&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">D_losses</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;D&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;iterations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_dcgan_faces_tutorial_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_dcgan_faces_tutorial_002.png"/>
 <p><strong>Visualization of G’s progression</strong></p>
 <p>Remember how we saved the generator’s output on the fixed_noise batch
 after every epoch of training. Now, we can visualize the training
@@ -1079,15 +978,14 @@ progression of G with an animation. Press the play button to start the
 animation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%capture</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="n">ims</span> <span class="o">=</span> <span class="p">[[</span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">i</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="n">animated</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">img_list</span><span class="p">]</span>
 <span class="n">ani</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">ArtistAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ims</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">repeat_delay</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">HTML</span><span class="p">(</span><span class="n">ani</span><span class="o">.</span><span class="n">to_jshtml</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_dcgan_faces_tutorial_003.png" class="sphx-glr-single-img" src="../_images/sphx_glr_dcgan_faces_tutorial_003.png"/>
-<p><strong>Real Images vs. Fake Images</strong></p>
+<p><strong>Real Images vs.&nbsp;Fake Images</strong></p>
 <p>Finally, lets take a look at some real images and fake images side by
 side.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab a batch of real images from the dataloader</span>
@@ -1096,19 +994,18 @@ side.</p>
 <span class="c1"># Plot the real images</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Real Images"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Real Images&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">vutils</span><span class="o">.</span><span class="n">make_grid</span><span class="p">(</span><span class="n">real_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)[:</span><span class="mi">64</span><span class="p">],</span> <span class="n">padding</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="c1"># Plot the fake images from the last epoch</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Fake Images"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Fake Images&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">img_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_dcgan_faces_tutorial_004.png" class="sphx-glr-single-img" src="../_images/sphx_glr_dcgan_faces_tutorial_004.png"/>
 </div>
 <div class="section" id="where-to-go-next">
 <h2>Where to Go Next<a class="headerlink" href="#where-to-go-next" title="Permalink to this headline">¶</a></h2>
@@ -1123,47 +1020,67 @@ size of the images and the model architecture</li>
 <li>Create GANs that generate
 <a class="reference external" href="https://deepmind.com/blog/wavenet-generative-model-raw-audio/">music</a></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 28 minutes  41.545 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-beginner-dcgan-faces-tutorial-py">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../_downloads/dc0e6f475c6735eb8d233374f8f462eb/dcgan_faces_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">dcgan_faces_tutorial.py</span></code></a></div>
+<a class="reference download internal" download="" href="../_downloads/ab4015495630d62f18adbf0caeb22ad4/dcgan_faces_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">dcgan_faces_tutorial.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../_downloads/e9c8374ecc202120dc94db26bf08a00f/dcgan_faces_tutorial.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">dcgan_faces_tutorial.ipynb</span></code></a></div>
+<a class="reference download internal" download="" href="../_downloads/2a558d92fcbd358e4e1c6e8839b4afa9/dcgan_faces_tutorial.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">dcgan_faces_tutorial.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 </div>
-</article>
-</div>
-<footer>
-<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a accesskey="n" class="btn btn-neutral float-right" href="audio_preprocessing_tutorial.html" rel="next" title="Audio I/O and Pre-Processing with torchaudio">Next <img class="next-page" src="../_static/images/chevron-right-orange.svg"/></a>
-<a accesskey="p" class="btn btn-neutral" href="fgsm_tutorial.html" rel="prev" title="Adversarial Example Generation"><img class="previous-page" src="../_static/images/chevron-right-orange.svg"/> Previous</a>
-</div>
-<hr class="helpful-hr hr-top"/>
-<div class="helpful-container">
-<div class="helpful-question">Was this helpful?</div>
-<div class="helpful-question yes-link" data-behavior="was-this-helpful-event" data-response="yes">Yes</div>
-<div class="helpful-question no-link" data-behavior="was-this-helpful-event" data-response="no">No</div>
-<div class="was-helpful-thank-you">Thank you</div>
-</div>
-<hr class="helpful-hr hr-bottom"/>
-<div role="contentinfo">
-<p>
-        © Copyright 2017, PyTorch.
+
+
+             </article>
+             
+            </div>
+            <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="audio_preprocessing_tutorial.html" class="btn btn-neutral float-right" title="Audio I/O and Pre-Processing with torchaudio" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
+      
+      
+        <a href="fgsm_tutorial.html" class="btn btn-neutral" title="Adversarial Example Generation" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+      
+    </div>
+  
+
+  
+
+    <hr class="helpful-hr hr-top">
+      <div class="helpful-container">
+        <div class="helpful-question">Was this helpful?</div>
+        <div class="helpful-question yes-link" data-behavior="was-this-helpful-event" data-response="yes">Yes</div>
+        <div class="helpful-question no-link" data-behavior="was-this-helpful-event" data-response="no">No</div>
+        <div class="was-helpful-thank-you">Thank you</div>
+      </div>
+    <hr class="helpful-hr hr-bottom"/>
+
+  
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, PyTorch.
 
     </p>
-</div>
-<div>
+  </div>
+    
+      <div>
         Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
       </div>
+     
+
 </footer>
-</div>
-</div>
-<div class="pytorch-content-right" id="pytorch-content-right">
-<div class="pytorch-right-menu" id="pytorch-right-menu">
-<div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
-<ul>
+
+          </div>
+        </div>
+
+        <div class="pytorch-content-right" id="pytorch-content-right">
+          <div class="pytorch-right-menu" id="pytorch-right-menu">
+            <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
+              <ul>
 <li><a class="reference internal" href="#">DCGAN Tutorial</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#generative-adversarial-networks">Generative Adversarial Networks</a><ul>
@@ -1186,25 +1103,39 @@ size of the images and the model architecture</li>
 </ul>
 </li>
 </ul>
-</div>
-</div>
-</div>
-</section>
-</div>
-<script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js" type="text/javascript"></script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-<script src="../_static/js/vendor/popper.min.js" type="text/javascript"></script>
-<script src="../_static/js/vendor/bootstrap.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-<script type="text/javascript">
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  
+
+
+  
+
+     
+       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+         <script type="text/javascript" src="../_static/jquery.js"></script>
+         <script type="text/javascript" src="../_static/underscore.js"></script>
+         <script type="text/javascript" src="../_static/doctools.js"></script>
+         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+     
+
+  
+
+  <script type="text/javascript" src="../_static/js/vendor/popper.min.js"></script>
+  <script type="text/javascript" src="../_static/js/vendor/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+ 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -1215,7 +1146,9 @@ size of the images and the model architecture</li>
   ga('send', 'pageview');
 
 </script>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
+
 <script>
 
   window.dataLayer = window.dataLayer || [];
@@ -1226,6 +1159,7 @@ size of the images and the model architecture</li>
   gtag('config', 'UA-117752657-2');
 
 </script>
+
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -1283,149 +1217,189 @@ size of the images and the model architecture</li>
      $(".hr-bottom").hide();
    }
 </script>
+
 <noscript>
-<img height="1" src="https://www.facebook.com/tr?id=243028289693773&amp;ev=PageView
-  &amp;noscript=1" width="1"/>
+  <img height="1" width="1"
+  src="https://www.facebook.com/tr?id=243028289693773&ev=PageView
+  &noscript=1"/>
 </noscript>
-<img alt="" height="1" src="https://www.googleadservices.com/pagead/conversion/795629140/?label=txkmCPmdtosBENSssfsC&amp;guid=ON&amp;script=0" style="border-style:none;" width="1"/>
-<!-- Begin Footer -->
-<div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
-<div class="container">
-<div class="row">
-<div class="col-md-4 text-center">
-<h2>Docs</h2>
-<p>Access comprehensive developer documentation for PyTorch</p>
-<a class="with-right-arrow" href="https://pytorch.org/docs/stable/index.html">View Docs</a>
+<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/795629140/?label=txkmCPmdtosBENSssfsC&amp;guid=ON&amp;script=0"/>
+
+
+  <!-- Begin Footer -->
+
+  <div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <h2>Docs</h2>
+          <p>Access comprehensive developer documentation for PyTorch</p>
+          <a class="with-right-arrow" href="https://pytorch.org/docs/stable/index.html">View Docs</a>
+        </div>
+
+        <div class="col-md-4 text-center">
+          <h2>Tutorials</h2>
+          <p>Get in-depth tutorials for beginners and advanced developers</p>
+          <a class="with-right-arrow" href="https://pytorch.org/tutorials">View Tutorials</a>
+        </div>
+
+        <div class="col-md-4 text-center">
+          <h2>Resources</h2>
+          <p>Find development resources and get your questions answered</p>
+          <a class="with-right-arrow" href="https://pytorch.org/resources">View Resources</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-logo-wrapper">
+        <a href="https://pytorch.org/" class="footer-logo"></a>
+      </div>
+
+      <div class="footer-links-wrapper">
+        <div class="footer-links-col">
+          <ul>
+            <li class="list-title"><a href="https://pytorch.org/">PyTorch</a></li>
+            <li><a href="https://pytorch.org/get-started">Get Started</a></li>
+            <li><a href="https://pytorch.org/features">Features</a></li>
+            <li><a href="https://pytorch.org/ecosystem">Ecosystem</a></li>
+            <li><a href="https://pytorch.org/blog/">Blog</a></li>
+            <li><a href="https://github.com/pytorch/pytorch/blob/master/CONTRIBUTING.md">Contributing</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <ul>
+            <li class="list-title"><a href="https://pytorch.org/resources">Resources</a></li>
+            <li><a href="https://pytorch.org/tutorials">Tutorials</a></li>
+            <li><a href="https://pytorch.org/docs/stable/index.html">Docs</a></li>
+            <li><a href="https://discuss.pytorch.org" target="_blank">Discuss</a></li>
+            <li><a href="https://github.com/pytorch/pytorch/issues" target="_blank">Github Issues</a></li>
+            <li><a href="https://pytorch.org/assets/brand-guidelines/PyTorch-Brand-Guidelines.pdf" target="_blank">Brand Guidelines</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col follow-us-col">
+          <ul>
+            <li class="list-title">Stay Connected</li>
+            <li>
+              <div id="mc_embed_signup">
+                <form
+                  action="https://twitter.us14.list-manage.com/subscribe/post?u=75419c71fe0a935e53dfa4a3f&id=91d0dccd39"
+                  method="post"
+                  id="mc-embedded-subscribe-form"
+                  name="mc-embedded-subscribe-form"
+                  class="email-subscribe-form validate"
+                  target="_blank"
+                  novalidate>
+                  <div id="mc_embed_signup_scroll" class="email-subscribe-form-fields-wrapper">
+                    <div class="mc-field-group">
+                      <label for="mce-EMAIL" style="display:none;">Email Address</label>
+                      <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Email Address">
+                    </div>
+
+                    <div id="mce-responses" class="clear">
+                      <div class="response" id="mce-error-response" style="display:none"></div>
+                      <div class="response" id="mce-success-response" style="display:none"></div>
+                    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_75419c71fe0a935e53dfa4a3f_91d0dccd39" tabindex="-1" value=""></div>
+
+                    <div class="clear">
+                      <input type="submit" value="" name="subscribe" id="mc-embedded-subscribe" class="button email-subscribe-button">
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </li>
+          </ul>
+
+          <div class="footer-social-icons">
+            <a href="https://www.facebook.com/pytorch" target="_blank" class="facebook"></a>
+            <a href="https://twitter.com/pytorch" target="_blank" class="twitter"></a>
+            <a href="https://www.youtube.com/pytorch" target="_blank" class="youtube"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cookie-banner-wrapper">
+  <div class="container">
+    <p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://www.facebook.com/policies/cookies/">Cookies Policy</a>.</p>
+    <img class="close-button" src="../_static/images/pytorch-x.svg">
+  </div>
 </div>
-<div class="col-md-4 text-center">
-<h2>Tutorials</h2>
-<p>Get in-depth tutorials for beginners and advanced developers</p>
-<a class="with-right-arrow" href="https://pytorch.org/tutorials">View Tutorials</a>
-</div>
-<div class="col-md-4 text-center">
-<h2>Resources</h2>
-<p>Find development resources and get your questions answered</p>
-<a class="with-right-arrow" href="https://pytorch.org/resources">View Resources</a>
-</div>
-</div>
-</div>
-</div>
-<footer class="site-footer">
-<div class="container footer-container">
-<div class="footer-logo-wrapper">
-<a class="footer-logo" href="https://pytorch.org/"></a>
-</div>
-<div class="footer-links-wrapper">
-<div class="footer-links-col">
-<ul>
-<li class="list-title"><a href="https://pytorch.org/">PyTorch</a></li>
-<li><a href="https://pytorch.org/get-started">Get Started</a></li>
-<li><a href="https://pytorch.org/features">Features</a></li>
-<li><a href="https://pytorch.org/ecosystem">Ecosystem</a></li>
-<li><a href="https://pytorch.org/blog/">Blog</a></li>
-<li><a href="https://github.com/pytorch/pytorch/blob/master/CONTRIBUTING.md">Contributing</a></li>
-</ul>
-</div>
-<div class="footer-links-col">
-<ul>
-<li class="list-title"><a href="https://pytorch.org/resources">Resources</a></li>
-<li><a href="https://pytorch.org/tutorials">Tutorials</a></li>
-<li><a href="https://pytorch.org/docs/stable/index.html">Docs</a></li>
-<li><a href="https://discuss.pytorch.org" target="_blank">Discuss</a></li>
-<li><a href="https://github.com/pytorch/pytorch/issues" target="_blank">Github Issues</a></li>
-<li><a href="https://pytorch.org/assets/brand-guidelines/PyTorch-Brand-Guidelines.pdf" target="_blank">Brand Guidelines</a></li>
-</ul>
-</div>
-<div class="footer-links-col follow-us-col">
-<ul>
-<li class="list-title">Stay Connected</li>
-<li>
-<div id="mc_embed_signup">
-<form action="https://twitter.us14.list-manage.com/subscribe/post?u=75419c71fe0a935e53dfa4a3f&amp;id=91d0dccd39" class="email-subscribe-form validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
-<div class="email-subscribe-form-fields-wrapper" id="mc_embed_signup_scroll">
-<div class="mc-field-group">
-<label for="mce-EMAIL" style="display:none;">Email Address</label>
-<input class="required email" id="mce-EMAIL" name="EMAIL" placeholder="Email Address" type="email" value=""/>
-</div>
-<div class="clear" id="mce-responses">
-<div class="response" id="mce-error-response" style="display:none"></div>
-<div class="response" id="mce-success-response" style="display:none"></div>
-</div> <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-<div aria-hidden="true" style="position: absolute; left: -5000px;"><input name="b_75419c71fe0a935e53dfa4a3f_91d0dccd39" tabindex="-1" type="text" value=""/></div>
-<div class="clear">
-<input class="button email-subscribe-button" id="mc-embedded-subscribe" name="subscribe" type="submit" value=""/>
-</div>
-</div>
-</form>
-</div>
-</li>
-</ul>
-<div class="footer-social-icons">
-<a class="facebook" href="https://www.facebook.com/pytorch" target="_blank"></a>
-<a class="twitter" href="https://twitter.com/pytorch" target="_blank"></a>
-<a class="youtube" href="https://www.youtube.com/pytorch" target="_blank"></a>
-</div>
-</div>
-</div>
-</div>
-</footer>
-<div class="cookie-banner-wrapper">
-<div class="container">
-<p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://www.facebook.com/policies/cookies/">Cookies Policy</a>.</p>
-<img class="close-button" src="../_static/images/pytorch-x.svg">
-</img></div>
-</div>
-<!-- End Footer -->
-<!-- Begin Mobile Menu -->
-<div class="mobile-main-menu">
-<div class="container-fluid">
-<div class="container">
-<div class="mobile-main-menu-header-container">
-<a aria-label="PyTorch" class="header-logo" href="https://pytorch.org/"></a>
-<a class="main-menu-close-button" data-behavior="close-mobile-menu" href="#"></a>
-</div>
-</div>
-</div>
-<div class="mobile-main-menu-links-container">
-<div class="main-menu">
-<ul>
-<li>
-<a href="https://pytorch.org/get-started">Get Started</a>
-</li>
-<li>
-<a href="https://pytorch.org/features">Features</a>
-</li>
-<li>
-<a href="https://pytorch.org/ecosystem">Ecosystem</a>
-</li>
-<li>
-<a href="https://pytorch.org/mobile">Mobile</a>
-</li>
-<li>
-<a href="https://pytorch.org/hub">PyTorch Hub</a>
-</li>
-<li>
-<a href="https://pytorch.org/blog/">Blog</a>
-</li>
-<li class="active">
-<a href="https://pytorch.org/tutorials">Tutorials</a>
-</li>
-<li>
-<a href="https://pytorch.org/docs/stable/index.html">Docs</a>
-</li>
-<li>
-<a href="https://pytorch.org/resources">Resources</a>
-</li>
-<li>
-<a href="https://github.com/pytorch/pytorch">Github</a>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<!-- End Mobile Menu -->
-<script src="../_static/js/vendor/anchor.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+
+  <!-- End Footer -->
+
+  <!-- Begin Mobile Menu -->
+
+  <div class="mobile-main-menu">
+    <div class="container-fluid">
+      <div class="container">
+        <div class="mobile-main-menu-header-container">
+          <a class="header-logo" href="https://pytorch.org/" aria-label="PyTorch"></a>
+          <a class="main-menu-close-button" href="#" data-behavior="close-mobile-menu"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-main-menu-links-container">
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://pytorch.org/get-started">Get Started</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/features">Features</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/ecosystem">Ecosystem</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/mobile">Mobile</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/hub">PyTorch Hub</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/blog/">Blog</a>
+          </li>
+
+          <li class="active">
+            <a href="https://pytorch.org/tutorials">Tutorials</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/docs/stable/index.html">Docs</a>
+          </li>
+
+          <li>
+            <a href="https://pytorch.org/resources">Resources</a>
+          </li>
+
+          <li>
+            <a href="https://github.com/pytorch/pytorch">Github</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Mobile Menu -->
+
+  <script type="text/javascript" src="../_static/js/vendor/anchor.min.js"></script>
+
+  <script type="text/javascript">
     $(document).ready(function() {
       mobileMenu.bind();
       mobileTOC.bind();

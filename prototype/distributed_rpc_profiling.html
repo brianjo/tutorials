@@ -406,7 +406,7 @@ initialization.</p>
 <span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">world_size</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_ADDR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_PORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;29500&quot;</span>
-    <span class="n">worker_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;worker</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">worker_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;worker</span><span class="si">{rank}</span><span class="s2">&quot;</span>
 
     <span class="c1"># Initialize RPC framework.</span>
     <span class="n">rpc</span><span class="o">.</span><span class="n">init_rpc</span><span class="p">(</span>
@@ -414,13 +414,13 @@ initialization.</p>
         <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
         <span class="n">world_size</span><span class="o">=</span><span class="n">world_size</span>
     <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">worker_name</span><span class="si">}</span><span class="s2"> successfully initialized RPC.&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{worker_name}</span><span class="s2"> successfully initialized RPC.&quot;</span><span class="p">)</span>
 
     <span class="k">pass</span> <span class="c1"># to be continued below</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> waiting for workers and shutting down RPC&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Rank </span><span class="si">{rank}</span><span class="s2"> waiting for workers and shutting down RPC&quot;</span><span class="p">)</span>
     <span class="n">rpc</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> shutdown RPC&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Rank </span><span class="si">{rank}</span><span class="s2"> shutdown RPC&quot;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -445,7 +445,7 @@ happening under the hood. Let’s add to the above <code class="docutils literal
     <span class="c1"># Above code omitted...</span>
     <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">dst_worker_rank</span> <span class="o">=</span> <span class="p">(</span><span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">world_size</span>
-        <span class="n">dst_worker_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;worker</span><span class="si">{</span><span class="n">dst_worker_rank</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">dst_worker_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;worker</span><span class="si">{dst_worker_rank}</span><span class="s2">&quot;</span>
         <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">random_tensor</span><span class="p">(),</span> <span class="n">random_tensor</span><span class="p">()</span>
         <span class="c1"># Send and wait RPC completion under profiling scope.</span>
         <span class="k">with</span> <span class="n">profiler</span><span class="o">.</span><span class="n">profile</span><span class="p">()</span> <span class="k">as</span> <span class="n">prof</span><span class="p">:</span>
@@ -540,7 +540,7 @@ Let’s add the following code to the above <code class="docutils literal notran
     <span class="c1"># Will generated trace for above profiling output</span>
     <span class="n">trace_file</span> <span class="o">=</span> <span class="s2">&quot;/tmp/trace.json&quot;</span>
     <span class="n">prof</span><span class="o">.</span><span class="n">export_chrome_trace</span><span class="p">(</span><span class="n">trace_file</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote trace to </span><span class="si">{</span><span class="n">trace_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Wrote trace to </span><span class="si">{trace_file}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now, we can load the trace file in Chrome (<code class="docutils literal notranslate"><span class="pre">chrome://tracing</span></code>). We should see output similar to
@@ -573,7 +573,7 @@ in this case, given in the trace column for <code class="docutils literal notran
 <span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">world_size</span><span class="p">):</span>
   <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_ADDR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
   <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_PORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;29500&quot;</span>
-  <span class="n">worker_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;worker</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="n">worker_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;worker</span><span class="si">{rank}</span><span class="s2">&quot;</span>
 
   <span class="c1"># Initialize RPC framework.</span>
   <span class="n">rpc</span><span class="o">.</span><span class="n">init_rpc</span><span class="p">(</span>
@@ -581,11 +581,11 @@ in this case, given in the trace column for <code class="docutils literal notran
       <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
       <span class="n">world_size</span><span class="o">=</span><span class="n">world_size</span>
   <span class="p">)</span>
-  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">worker_name</span><span class="si">}</span><span class="s2"> successfully initialized RPC.&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{worker_name}</span><span class="s2"> successfully initialized RPC.&quot;</span><span class="p">)</span>
 
   <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
     <span class="n">dst_worker_rank</span> <span class="o">=</span> <span class="p">(</span><span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">world_size</span>
-    <span class="n">dst_worker_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;worker</span><span class="si">{</span><span class="n">dst_worker_rank</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">dst_worker_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;worker</span><span class="si">{dst_worker_rank}</span><span class="s2">&quot;</span>
     <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">random_tensor</span><span class="p">(),</span> <span class="n">random_tensor</span><span class="p">()</span>
     <span class="c1"># Send and wait RPC completion under profiling scope.</span>
     <span class="k">with</span> <span class="n">profiler</span><span class="o">.</span><span class="n">profile</span><span class="p">()</span> <span class="k">as</span> <span class="n">prof</span><span class="p">:</span>
@@ -604,12 +604,12 @@ in this case, given in the trace column for <code class="docutils literal notran
 
     <span class="n">trace_file</span> <span class="o">=</span> <span class="s2">&quot;/tmp/trace.json&quot;</span>
     <span class="n">prof</span><span class="o">.</span><span class="n">export_chrome_trace</span><span class="p">(</span><span class="n">trace_file</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote trace to </span><span class="si">{</span><span class="n">trace_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Wrote trace to </span><span class="si">{trace_file}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> waiting for workers and shutting down RPC&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Rank </span><span class="si">{rank}</span><span class="s2"> waiting for workers and shutting down RPC&quot;</span><span class="p">)</span>
   <span class="n">rpc</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
-  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> shutdown RPC&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Rank </span><span class="si">{rank}</span><span class="s2"> shutdown RPC&quot;</span><span class="p">)</span>
 
 
 

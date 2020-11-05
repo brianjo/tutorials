@@ -31,11 +31,6 @@ In this tutorial, we shall go through two tasks:
     from torch.autograd import Function
 
 
-
-
-
-
-
 Parameter-less example
 ----------------------
 
@@ -74,11 +69,6 @@ It is aptly named BadFFTFunction
         return BadFFTFunction.apply(input)
 
 
-
-
-
-
-
 **Example usage of the created layer:**
 
 
@@ -90,42 +80,6 @@ It is aptly named BadFFTFunction
     print(result)
     result.backward(torch.randn(result.size()))
     print(input)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    tensor([[ 3.3511,  5.0170, 10.7201,  0.9487,  1.0681],
-            [11.2403,  8.4097,  6.8151,  9.0319,  5.9565],
-            [ 2.2178,  4.9061,  2.3982,  5.9969,  5.7433],
-            [ 0.7443,  9.5370, 13.9980,  8.6658,  9.2677],
-            [ 2.3527, 17.8487,  3.0885,  2.8219,  3.5384],
-            [ 0.7443,  8.0933,  4.1652,  8.7785,  9.2677],
-            [ 2.2178,  1.2717,  5.0553,  0.6225,  5.7433],
-            [11.2403,  5.6077,  5.9388,  4.7079,  5.9565]],
-           grad_fn=<BadFFTFunctionBackward>)
-    tensor([[-5.9436e-01,  3.1907e-01, -8.7925e-01, -9.0102e-01, -1.3856e+00,
-              2.8206e-01,  4.5718e-01, -2.7556e-01],
-            [-1.7179e+00, -1.1802e+00, -2.9593e-02,  8.1833e-01,  2.6364e-01,
-             -1.1776e-01,  7.0667e-01, -9.0833e-01],
-            [-7.9212e-01, -1.3922e+00,  2.3863e+00, -2.3181e-01, -1.5412e+00,
-              6.0928e-01, -3.9785e-01, -1.1137e+00],
-            [-1.1897e+00,  4.0699e-01, -1.8146e-01,  7.8958e-01,  3.8019e-01,
-              7.9919e-01, -1.3814e+00,  6.6150e-01],
-            [ 9.2977e-01,  2.2796e-01, -3.4080e-01,  8.1199e-02,  2.1476e-01,
-             -6.0844e-01,  1.8034e-01,  1.3490e+00],
-            [-3.8939e-01,  5.2680e-01,  1.6589e+00,  7.7571e-01, -7.2882e-02,
-              7.6722e-01,  7.6949e-02, -4.2916e-01],
-            [ 1.0160e+00,  2.9470e-01, -1.3543e+00, -4.7405e-01, -8.5970e-02,
-             -1.3119e+00,  1.3787e+00,  1.1018e+00],
-            [-1.3808e+00, -4.3428e-01,  1.8172e+00,  5.8493e-01,  3.6558e-02,
-             -1.0417e+00,  1.9709e-03, -1.1168e+00]], requires_grad=True)
 
 
 Parametrized example
@@ -186,11 +140,6 @@ The backward pass computes the gradient wrt the input and the gradient wrt the f
 
 
 
-
-
-
-
-
 **Example usage:**
 
 
@@ -204,59 +153,6 @@ The backward pass computes the gradient wrt the input and the gradient wrt the f
     print("Output from the convolution: ", output)
     output.backward(torch.randn(8, 8))
     print("Gradient for the input map: ", input.grad)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Filter and bias:  [Parameter containing:
-    tensor([[ 0.1889, -1.9499, -0.4238],
-            [-1.1796,  0.6157,  0.1090],
-            [ 0.9628, -1.9340,  0.7125]], requires_grad=True), Parameter containing:
-    tensor([[-0.8731]], requires_grad=True)]
-    Output from the convolution:  tensor([[ 6.6847e+00, -6.5831e+00, -9.9157e+00,  6.3574e+00, -5.0339e+00,
-              1.0749e+00,  2.9366e+00, -9.6278e-01],
-            [-8.1056e+00, -3.3881e+00,  2.6233e-01, -6.1807e+00, -1.4548e+00,
-             -4.3211e+00, -4.1766e+00,  5.4119e+00],
-            [ 4.5924e+00,  5.9590e-01, -5.0887e+00,  2.2085e+00, -3.8562e+00,
-              7.5647e+00, -2.6444e+00,  3.8068e+00],
-            [-4.8286e+00, -5.0235e-01, -5.9880e-01,  4.7286e-01,  2.0707e+00,
-             -5.2590e+00,  2.2327e+00,  3.8064e+00],
-            [ 2.8433e+00,  1.0220e-01,  4.1322e+00,  2.4514e-03,  9.8833e-01,
-              6.2717e-01,  4.6858e+00, -4.3226e+00],
-            [-4.3130e-01, -1.6080e+00, -2.8110e+00,  6.4937e+00, -8.7077e+00,
-              2.9896e+00, -7.8729e+00,  1.8841e+00],
-            [-1.5120e+00, -5.5790e+00, -1.5777e+00,  2.7065e-01,  4.3758e+00,
-             -6.7114e+00,  7.3119e+00, -3.1650e+00],
-            [-8.0111e-01,  7.2862e-01, -6.9671e-01,  2.3551e+00, -3.5234e+00,
-              1.2477e-01, -1.2110e-01, -5.7108e-01]],
-           grad_fn=<ScipyConv2dFunctionBackward>)
-    Gradient for the input map:  tensor([[ 0.4307, -4.5365, -0.1535,  1.2811,  1.2874,  0.4314,  0.1198,  2.1563,
-              1.3535,  0.1912],
-            [-2.6437,  1.6265, -0.8897, -0.2806,  1.4213, -0.6120,  1.6911, -3.4532,
-              1.7180,  0.5572],
-            [ 1.7832, -4.2088,  1.2453,  2.2698,  0.2640, -0.4928, -5.9957,  3.5973,
-             -0.5415, -0.4567],
-            [ 0.8896,  0.0447,  1.4169, -0.9226,  1.5949, -1.7929,  9.3515, -5.6173,
-              4.7859, -0.7160],
-            [ 0.3619, -1.1523,  0.1440, -0.7083,  5.2816,  2.5779, -1.4940,  1.7753,
-              0.6180,  0.1313],
-            [-2.5212,  4.8885, -2.5046,  1.0523, -3.6917, -1.0334,  0.4279, -5.2185,
-             -2.3876, -1.4910],
-            [ 1.9795, -4.6678,  8.2502, -8.4322,  5.4878, -2.6180,  1.7658, -5.2693,
-              3.4605, -0.1387],
-            [ 0.5998, -0.5884, -2.9625,  1.0359, -2.0166, -1.7224, -1.0322,  2.9116,
-             -4.4071,  1.3753],
-            [-2.2366,  1.2169,  1.5534, -3.1698,  1.8933,  2.7466, -4.9871,  2.2835,
-             -0.1533, -0.0314],
-            [ 1.2727, -2.3907,  0.7509,  1.0661, -3.5064,  4.1388, -3.2209,  2.0142,
-             -1.0161,  0.2386]])
 
 
 **Check the gradients:**
@@ -274,21 +170,9 @@ The backward pass computes the gradient wrt the input and the gradient wrt the f
     print("Are the gradients correct: ", test)
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    Are the gradients correct:  True
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.547 seconds)
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_advanced_numpy_extensions_tutorial.py:
